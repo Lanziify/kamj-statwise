@@ -5,7 +5,6 @@ import {
   Highlight,
   Stack,
   Text,
-  Box,
   Image,
   SimpleGrid,
   Card,
@@ -13,42 +12,46 @@ import {
   Divider,
   Center,
   Tag,
-} from "@chakra-ui/react";
-import { IoArrowForward } from "react-icons/io5";
-import React from "react";
-import LearnSvg from "../assets/undraw_mathematics_-4-otb.svg";
-import QuizSvg from "../assets/undraw_questions_re_1fy7.svg";
-import GameSvg from "../assets/undraw_gaming_re_cma2.svg";
-import InfographSvg from "../assets/undraw_information_tab_re_f0w3.svg";
-// import { QuizSvg } from "../components/QuizSvg";
-// import { GameSvg } from "../components/GameSvg";
-import landingBgOverlay from "../assets/WelcomeBg.png";
-import aboutBgOverlay from "../assets/WebBg.jpg";
-import helpBgOverlay from "../assets/HelpBg.jpg";
+  CardFooter,
+} from "@chakra-ui/react"
+import { IoArrowForward } from "react-icons/io5"
+import LearnSvg from "../assets/undraw_mathematics_-4-otb.svg"
+import QuizSvg from "../assets/undraw_questions_re_1fy7.svg"
+import InfographSvg from "../assets/undraw_information_tab_re_f0w3.svg"
+import landingBgOverlay from "../assets/WelcomeBg.png"
+import aboutBgOverlay from "../assets/WebBg.jpg"
+import helpBgOverlay from "../assets/HelpBg.jpg"
+import { NavLink } from "react-router-dom"
 
 const cards = [
   {
     heading: "Learn",
     svgSrc: LearnSvg,
+    description:
+      "Dive into the world of statistics with our comprehensive learning modules. Explore various statistical concepts, methods, and applications through interactive lessons and engaging content.",
+    path: "learn",
   },
   {
-    heading: "Quizzes",
+    heading: "Quizzes/Games",
     svgSrc: QuizSvg,
-  },
-  {
-    heading: "Games",
-    svgSrc: GameSvg,
+    description:
+      "Test your statistical knowledge with our interactive quizzes. Challenge yourself with a range of questions covering different topics and difficulty levels. Receive instant feedback to track your progress and improve your skills.",
+    path: "quiz",
   },
   {
     heading: "Infographics",
     svgSrc: InfographSvg,
+    description:
+      "Visualize complex statistical information with our creative infographics. Gain insights and understanding through visually appealing graphics that simplify and explain statistical concepts in a clear and concise manner.",
+    path: "infographic",
   },
-];
+]
 
 const IndexPage = () => {
   return (
     <div>
       <Flex
+        id="hero"
         height="calc(100vh - 80px)"
         alignItems="center"
         sx={{
@@ -114,7 +117,7 @@ const IndexPage = () => {
           </Button>
         </Stack>
       </Flex>
-      <Flex background="rgba(4, 19, 60)">
+      <Flex id="service" background="rgba(4, 19, 60)">
         <Stack flex={1} padding={6} maxWidth="7xl" margin="auto" spacing={6}>
           <Heading
             fontSize={{
@@ -156,23 +159,14 @@ const IndexPage = () => {
               base: 1,
               sm: 2,
               md: 3,
-              xl: 4,
+              xl: 3,
             }}
             spacing={6}
           >
             {cards.map((item, index) => (
-              <Card
-                key={index}
-                // margin="auto"
-                borderRadius="xl"
-                // width="fit-content"
-                // overflow="hidden"
-                background="#364263"
-                // shadow="lg"
-              >
+              <Card key={index} borderRadius="xl" background="#364263">
                 <CardBody>
                   <Image
-                    // boxSize={{ base: 180, sm: "xs", md: "sm", lg: "sm" }}
                     aspectRatio={1}
                     src={item.svgSrc}
                     padding={8}
@@ -182,18 +176,27 @@ const IndexPage = () => {
                   <Stack mt={4}>
                     <Heading color="white">{item.heading}</Heading>
                     <Text textIndent="1rem" textAlign="justify" color="white">
-                      Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                      Dignissimos, ipsam? Lorem ipsum dolor sit amet.
+                      {item.description}
                     </Text>
-                    <Button colorScheme="yellow">Open</Button>
                   </Stack>
                 </CardBody>
+                <CardFooter>
+                  <Button
+                    width="100%"
+                    as={NavLink}
+                    colorScheme="yellow"
+                    to={item.path}
+                  >
+                    Open
+                  </Button>
+                </CardFooter>
               </Card>
             ))}
           </SimpleGrid>
         </Stack>
       </Flex>
       <Flex
+        id="about"
         minHeight="100vh"
         sx={{
           "&:before": {
@@ -217,6 +220,8 @@ const IndexPage = () => {
             left: 0,
             bottom: 0,
             right: 0,
+            backgroundImage:
+              "linear-gradient(to bottom, rgba(4, 19, 60, 1), rgba(4, 19, 60, 0))",
             backdropFilter: "blur(8px)",
             zIndex: -1,
           },
@@ -271,17 +276,9 @@ const IndexPage = () => {
             data-driven endeavors.
           </Text>
         </Stack>
-        {/* <Stack>
-          <Heading>Our Team</Heading>
-          <Text>
-            Our team of student-researchers is fueled by a shared passion for
-            statistics. With a blend of academic curiosity and practical
-            insights, we are dedicated to providing fellow learners with
-            valuable resources and support on our statistical learning platform.
-          </Text>
-        </Stack> */}
       </Flex>
       <Flex
+        id="contact"
         minHeight="100vh"
         sx={{
           "&:before": {
@@ -356,7 +353,7 @@ const IndexPage = () => {
         </Stack>
       </Flex>
     </div>
-  );
-};
+  )
+}
 
-export default IndexPage;
+export default IndexPage
