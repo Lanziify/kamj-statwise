@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import './App.css'
 import IndexPage from './pages/IndexPage'
 import PublicRoute from './routes/Public'
@@ -14,6 +14,8 @@ import Login from './pages/auth/Login'
 import ProtectedRoute from './routes/Protected'
 import Dashboard from './pages/protected/Dashboard'
 import AuthRoute from './routes/Auth'
+import Lessons from './pages/protected/Lessons'
+import Topic from './pages/protected/Topic'
 
 function App() {
     return (
@@ -33,7 +35,12 @@ function App() {
                 <Route path='login' element={<Login />} />
             </Route>
             <Route element={<ProtectedRoute />}>
-                <Route path='dashboard' element={<Dashboard />} />
+                <Route path='admin'>
+                    <Route index element={<Navigate to='dashboard' />} />
+                    <Route path='dashboard' element={<Dashboard />} />
+                    <Route path='lessons' element={<Lessons />} />
+                    <Route path='lessons/:title' element={<Topic />} />
+                </Route>
             </Route>
         </Routes>
     )

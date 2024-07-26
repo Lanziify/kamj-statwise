@@ -1,10 +1,11 @@
 import { background, extendTheme } from '@chakra-ui/react'
 import '@fontsource-variable/heebo'
+import '@fontsource/poppins'
 
 const theme = extendTheme({
     fonts: {
-        heading: `'Heebo', sans-serif`,
-        body: `'Heebo', sans-serif`,
+        heading: `'poppins', sans-serif`,
+        body: `'poppins', sans-serif`,
     },
 })
 

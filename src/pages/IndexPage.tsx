@@ -100,7 +100,7 @@ const IndexPage = () => {
             >
                 <Stack
                     textAlign='center'
-                    maxWidth='6xl'
+                    maxWidth='3xl'
                     margin='auto'
                     padding={6}
                     gap={4}

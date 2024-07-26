@@ -58,7 +58,7 @@ const Header = () => {
         {
             label: 'Dashboard',
             icon: <MdOutlineDashboard />,
-            path: 'dashboard',
+            path: 'admin/dashboard',
             as: NavLink,
         },
         // {
@@ -161,6 +161,7 @@ const Header = () => {
                                         as={menuItem?.as}
                                         to={menuItem.path}
                                         fontWeight={500}
+                                        fontSize='sm'
                                     >
                                         {menuItem.label}
                                     </MenuItem>
@@ -171,6 +172,7 @@ const Header = () => {
                                     background='transparent'
                                     icon={<BiLogOut/>}
                                     fontWeight={500}
+                                    fontSize='sm'
                                     onClick={logout}
                                 >
                                     Logout

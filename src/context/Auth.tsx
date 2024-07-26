@@ -51,7 +51,7 @@ const Auth: React.FC<AuthProverProps> = ({ children }) => {
     const login = async (values: loginFields) => {
         try {
             await tokenMutation(values)
-            return navigation('dashboard')
+            return navigation('admin')
         } catch (error) {
             throw error
         }
@@ -106,8 +106,6 @@ const Auth: React.FC<AuthProverProps> = ({ children }) => {
             }
         }
     }, [token])
-
-    console.log(token)
 
     return (
         <AuthContext.Provider

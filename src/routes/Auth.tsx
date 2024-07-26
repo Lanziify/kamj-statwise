@@ -8,7 +8,7 @@ const AuthRoute = () => {
     if (!token && isTokenLoading) {
         return
     } else if (token) {
-        return <Navigate to={'dashboard'} />
+        return <Navigate to={'admin'} />
     }
 
     return (
