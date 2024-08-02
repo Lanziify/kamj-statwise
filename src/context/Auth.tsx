@@ -5,6 +5,7 @@ import { JWTData, loginFields } from '../types/type'
 import { jwtDecode } from 'jwt-decode'
 import { useNavigate } from 'react-router-dom'
 import useAxiosInterceptor from '../hooks/useAxiosInterceptor'
+import { useToast } from '@chakra-ui/react'
 
 interface AuthProverProps {
     children: React.ReactNode
@@ -28,6 +29,7 @@ const AuthContext = React.createContext<AuthContextType>({
 
 const Auth: React.FC<AuthProverProps> = ({ children }) => {
     const navigation = useNavigate()
+    const toast = useToast()
     const [token, setToken] = React.useState<string | null>(null)
     const customAxios = useAxiosInterceptor(token as string)
     const [tokenPayload, setTokenPayload] = React.useState<JWTData | null>(null)
@@ -51,6 +53,13 @@ const Auth: React.FC<AuthProverProps> = ({ children }) => {
     const login = async (values: loginFields) => {
         try {
             await tokenMutation(values)
+            toast({
+                title: 'Login successful',
+                description: 'You are now logged in',
+                status: 'success',
+                duration: 9000,
+                isClosable: true,
+            })
             return navigation('admin')
         } catch (error) {
             throw error

@@ -23,7 +23,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
     return (
         <ChakraModal {...props}>
             <ModalOverlay />
-            <ModalContent background='gray.800'>
+            <ModalContent background='gray.800' margin={4}>
                 <ModalHeader color='white'>{title}</ModalHeader>
                 <ModalCloseButton color='white' />
                 <ModalBody pb={6}>{children}</ModalBody>

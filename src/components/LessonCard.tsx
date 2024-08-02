@@ -103,7 +103,7 @@ const LessonCard = React.forwardRef<ChildMethods, LessonCardProps>(
                                 onClick={onOpen}
                             />
                         </Flex>
-                        <Text fontSize='sm' color='gray.400'>
+                        <Text fontSize='sm' color='gray.400' contentEditable>
                             Lorem ipsum dolor sit amet consectetur adipisicing
                             elit. Veritatis, tempore fugiat. Ad, quo assumenda?
                             Sint ex autem nisi, dolore omnis totam asperiores,

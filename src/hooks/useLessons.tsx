@@ -30,6 +30,16 @@ const useLessons = () => {
         },
     })
 
+    const { mutateAsync: deleteLessonMutation } = useMutation({
+        mutationKey: ['deleteLesson'],
+        mutationFn: (id: number) => {
+            return axios.delete(`lessons/${id}`)
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['lessons'] })
+        },
+    })
+
     const { mutateAsync: deleteTopicMutation } = useMutation({
         mutationKey: ['deleteTopic'],
         mutationFn: (id: number) => {
@@ -45,7 +55,8 @@ const useLessons = () => {
         lessonError,
         isLessonLoading,
         addLessonMutation,
-        deleteTopicMutation
+        deleteLessonMutation,
+        deleteTopicMutation,
     }
 }
 

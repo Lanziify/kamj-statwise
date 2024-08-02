@@ -170,7 +170,7 @@ const Header = () => {
                             {token && (
                                 <MenuItem
                                     background='transparent'
-                                    icon={<BiLogOut/>}
+                                    icon={<BiLogOut />}
                                     fontWeight={500}
                                     fontSize='sm'
                                     onClick={logout}

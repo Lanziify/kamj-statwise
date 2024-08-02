@@ -152,6 +152,11 @@ const TopicCard = React.forwardRef<ChildMethods, LessonCardProps>(
                                         color='white'
                                         borderColor='gray.600'
                                         placeholder='Topic'
+                                        _focus={{
+                                            borderColor: 'yellow.500',
+                                            boxShadow:
+                                                '0 0 0 2px rgba(255, 255, 0, 0.5)',
+                                        }}
                                     />
                                     <FormErrorMessage>
                                         {errors.title && errors.title.message}
@@ -163,7 +168,12 @@ const TopicCard = React.forwardRef<ChildMethods, LessonCardProps>(
                                         borderColor='gray.600'
                                         color='white'
                                         placeholder='Write your topic description here'
-                                    ></Textarea>
+                                        _focus={{
+                                            borderColor: 'yellow.500',
+                                            boxShadow:
+                                                '0 0 0 2px rgba(255, 255, 0, 0.5)',
+                                        }}
+                                    />
                                 </FormControl>
                                 <FormControl>
                                     <JoditEditor
