@@ -23,6 +23,7 @@ import aboutBgOverlay from '../assets/WebBg.jpg'
 import helpBgOverlay from '../assets/HelpBg.jpg'
 import { NavLink } from 'react-router-dom'
 import { FaArrowRight } from 'react-icons/fa'
+import Header from '../components/Header'
 
 const cards = [
     {
@@ -63,6 +64,7 @@ const IndexPage = () => {
 
     return (
         <div>
+            <Header/>
             {/* Hero */}
             <Flex
                 id='hero'

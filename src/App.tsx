@@ -20,11 +20,10 @@ import Topic from './pages/protected/Topic'
 function App() {
     return (
         <Routes>
-            <Route path='/' element={<PublicRoute />}>
-                <Route index element={<IndexPage />} />
+            <Route path='/' index element={<IndexPage />} />
+            <Route element={<PublicRoute />}>
                 <Route path='lessons' element={<LessonPage />} />
-                <Route path='learn/:id' element={<LessonContentPage />} />
-                <Route path='learn/z-table' element={<Ztable />} />
+                <Route path='lessons/:title' element={<Topic />} />
                 <Route path='quiz' element={<QuizMenuPage />} />
                 <Route path='quiz/:id' element={<QuizPage />} />
                 <Route path='quiz/score' element={<ScorePage />} />

@@ -10,15 +10,18 @@ import {
 } from '@chakra-ui/react'
 import { IoMenuOutline } from 'react-icons/io5'
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import { Link } from 'react-scroll'
 import { FaBook, FaGamepad, FaImage, FaLock, FaPencil } from 'react-icons/fa6'
 import { useAuth } from '../context/Auth'
 import { MdOutlineDashboard } from 'react-icons/md'
 import { BiLogOut } from 'react-icons/bi'
+import BreadCrumbs from './BreadCrumbs'
 
 const Header = () => {
     const { token, logout } = useAuth()
+    const location = useLocation()
+
     const [showHeaderBackground, setShowHeaderBackground] =
         React.useState(false)
 
@@ -90,8 +93,7 @@ const Header = () => {
     React.useEffect(() => {
         const onScroll = () => {
             const scrollY = window.scrollY
-            const opacity = Math.min(scrollY / (window.innerHeight / 10), 1)
-            if (opacity === 1) {
+            if (scrollY > 64 / 2) {
                 setShowHeaderBackground(true)
             } else {
                 setShowHeaderBackground(false)
@@ -105,10 +107,15 @@ const Header = () => {
         }
     }, [])
 
+    console.log()
+
     return (
         <Box
             sx={{
-                position: 'fixed',
+                position:
+                    location.pathname.split('/').slice(1)[0] === ''
+                        ? 'fixed'
+                        : 'sticky',
                 top: 0,
                 right: 0,
                 left: 0,
@@ -182,6 +189,7 @@ const Header = () => {
                     </Menu>
                 </Flex>
             </Box>
+            <BreadCrumbs />
         </Box>
     )
 }

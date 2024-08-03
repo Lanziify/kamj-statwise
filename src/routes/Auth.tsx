@@ -1,6 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom'
 import Header from '../components/Header'
 import { useAuth } from '../context/Auth'
+import { Box, Container, Flex } from '@chakra-ui/react'
 
 const AuthRoute = () => {
     const { token, isTokenLoading } = useAuth()
@@ -12,10 +13,12 @@ const AuthRoute = () => {
     }
 
     return (
-        <>
+        <Flex minHeight='100vh' background='gray.900' direction='column'>
             <Header />
-            <Outlet />
-        </>
+            <Container maxWidth='6xl' flex={1}>
+                <Outlet />
+            </Container>
+        </Flex>
     )
 }
 

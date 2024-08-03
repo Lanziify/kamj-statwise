@@ -1,8 +1,8 @@
 import React from 'react'
 import {
     Alert,
+    Box,
     Button,
-    Container,
     Flex,
     FormControl,
     FormErrorMessage,
@@ -41,98 +41,97 @@ const Login = () => {
     }
 
     return (
-        <Flex height='100vh' background='gray.900'>
-            <Container
-                p={6}
-                maxWidth='sm'
-                alignSelf='center'
-                borderWidth={1}
-                rounded='md'
-                borderColor='gray.700'
-            >
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <Stack spacing={4} color='white'>
-                        <Heading mb={4}>Login</Heading>
-                        <FormControl isInvalid={!!errors.email}>
-                            <FormLabel fontSize='sm' fontWeight={700}>
-                                Email
-                            </FormLabel>
-                            <Input
-                                {...register('email', {
-                                    required: 'Email is required',
-                                    pattern: {
-                                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                                        message: 'Invalid email address',
-                                    },
-                                })}
-                                type='email'
-                                placeholder='Email'
-                                _focus={{
-                                    borderColor: 'yellow.500',
-                                    boxShadow:
-                                        '0 0 0 2px rgba(255, 255, 0, 0.5)',
-                                }}
-                                _autofill={{
-                                    background: 'transparent',
-                                }}
-                                fontSize='sm'
-                                borderColor='gray.700'
-                            />
-                            <FormErrorMessage>
-                                {errors.email && errors.email.message}
-                            </FormErrorMessage>
-                        </FormControl>
-                        <FormControl isInvalid={!!errors.password}>
-                            <FormLabel fontWeight={700} fontSize='sm'>
-                                Password
-                            </FormLabel>
-                            <Input
-                                {...register('password', {
-                                    required: 'Password is required',
-                                    minLength: {
-                                        value: 8,
-                                        message:
-                                            'Password must be at least 8 characters long',
-                                    },
-                                })}
-                                type='password'
-                                placeholder='Password'
-                                _focus={{
-                                    borderColor: 'yellow.500',
-                                    boxShadow:
-                                        '0 0 0 2px rgba(255, 255, 0, 0.5)',
-                                }}
-                                _autofill={{
-                                    background: 'transparent',
-                                }}
-                                fontSize='sm'
-                                borderColor='gray.700'
-                            />
-                            <FormErrorMessage>
-                                {errors.password && errors.password.message}
-                            </FormErrorMessage>
-                        </FormControl>
-                        <Alert
-                            hidden={!loginError}
-                            status='error'
-                            rounded='md'
-                            variant='solid'
+        <Box
+            p={6}
+            margin='auto'
+            justifySelf='center'
+            translateY={4}
+            maxWidth='md'
+            alignSelf='center'
+            borderWidth={1}
+            rounded='md'
+            borderColor='gray.700'
+        >
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <Stack spacing={4} color='white'>
+                    <Heading mb={4}>Login</Heading>
+                    <FormControl isInvalid={!!errors.email}>
+                        <FormLabel fontSize='sm' fontWeight={700}>
+                            Email
+                        </FormLabel>
+                        <Input
+                            {...register('email', {
+                                required: 'Email is required',
+                                pattern: {
+                                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                    message: 'Invalid email address',
+                                },
+                            })}
+                            type='email'
+                            placeholder='Email'
+                            _focus={{
+                                borderColor: 'yellow.500',
+                                boxShadow: '0 0 0 2px rgba(255, 255, 0, 0.5)',
+                            }}
+                            _autofill={{
+                                background: 'transparent',
+                            }}
                             fontSize='sm'
-                        >
-                            {loginError}
-                        </Alert>
-                        <Button
-                            type='submit'
-                            disabled={isSubmitting}
-                            colorScheme='yellow'
-                            alignSelf='start'
-                        >
-                            Login
-                        </Button>
-                    </Stack>
-                </form>
-            </Container>
-        </Flex>
+                            borderColor='gray.700'
+                        />
+                        <FormErrorMessage>
+                            {errors.email && errors.email.message}
+                        </FormErrorMessage>
+                    </FormControl>
+                    <FormControl isInvalid={!!errors.password}>
+                        <FormLabel fontWeight={700} fontSize='sm'>
+                            Password
+                        </FormLabel>
+                        <Input
+                            {...register('password', {
+                                required: 'Password is required',
+                                minLength: {
+                                    value: 8,
+                                    message:
+                                        'Password must be at least 8 characters long',
+                                },
+                            })}
+                            type='password'
+                            placeholder='Password'
+                            _focus={{
+                                borderColor: 'yellow.500',
+                                boxShadow: '0 0 0 2px rgba(255, 255, 0, 0.5)',
+                            }}
+                            _autofill={{
+                                background: 'transparent',
+                            }}
+                            fontSize='sm'
+                            borderColor='gray.700'
+                        />
+                        <FormErrorMessage>
+                            {errors.password && errors.password.message}
+                        </FormErrorMessage>
+                    </FormControl>
+                    <Alert
+                        hidden={!loginError}
+                        status='error'
+                        rounded='md'
+                        variant='solid'
+                        fontSize='sm'
+                    >
+                        {loginError}
+                    </Alert>
+                    <Button
+                        type='submit'
+                        disabled={isSubmitting}
+                        colorScheme='yellow'
+                        alignSelf='start'
+                    >
+                        Login
+                    </Button>
+                </Stack>
+            </form>
+        </Box>
     )
 }
 

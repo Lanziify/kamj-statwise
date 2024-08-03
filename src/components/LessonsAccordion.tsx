@@ -106,6 +106,9 @@ const LessonsAccordion: React.FC<LessonAccordionType> = (props) => {
                                     flex={1}
                                     textAlign='left'
                                     fontWeight={500}
+                                    whiteSpace='nowrap'
+                                    overflow='hidden'
+                                    textOverflow='ellipsis'
                                 >
                                     {lesson.title}
                                 </Box>
@@ -158,7 +161,7 @@ const LessonsAccordion: React.FC<LessonAccordionType> = (props) => {
                                                 >
                                                     {topic.title}
                                                 </Button>
-                                                <Menu>
+                                                <Menu placement='bottom-end'>
                                                     <MenuButton
                                                         as={IconButton}
                                                         size='sm'

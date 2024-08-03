@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from 'react-router-dom'
 import Header from '../components/Header'
-import { Container, Flex } from '@chakra-ui/react'
+import { Box, Container, Flex, Stack } from '@chakra-ui/react'
 import { useAuth } from '../context/Auth'
 
 const ProtectedRoute = () => {
@@ -10,17 +10,17 @@ const ProtectedRoute = () => {
         return
     } else if (!token) {
         return <Navigate to='/' replace />
-    } 
+    }
 
     return (
-        <>
+        <Flex minHeight='100vh' direction='column' background='gray.900'>
             <Header />
-            <Flex minHeight='100vh' background='gray.900'>
-                <Container maxWidth='6xl' mt='64px'>
+            <Box flex={1}>
+                <Container maxWidth='6xl' mt={2}>
                     <Outlet />
                 </Container>
-            </Flex>
-        </>
+            </Box>
+        </Flex>
     )
 }
 
