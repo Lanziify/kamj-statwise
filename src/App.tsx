@@ -3,8 +3,6 @@ import './App.css'
 import IndexPage from './pages/IndexPage'
 import PublicRoute from './routes/Public'
 import LessonPage from './pages/LessonPage'
-import LessonContentPage from './pages/LessonContentPage'
-import Ztable from './pages/lectures/Ztable'
 import QuizMenuPage from './pages/QuizMenuPage'
 import QuizPage from './pages/QuizPage'
 import ScorePage from './pages/ScorePage'
@@ -16,6 +14,8 @@ import Dashboard from './pages/protected/Dashboard'
 import AuthRoute from './routes/Auth'
 import Lessons from './pages/protected/Lessons'
 import Topic from './pages/protected/Topic'
+import CreateTopic from './pages/protected/CreateTopic'
+import QuizList from './pages/protected/QuizList'
 
 function App() {
     return (
@@ -33,12 +33,16 @@ function App() {
             <Route element={<AuthRoute />}>
                 <Route path='login' element={<Login />} />
             </Route>
-            <Route element={<ProtectedRoute />}>
-                <Route path='admin'>
-                    <Route index element={<Navigate to='dashboard' />} />
-                    <Route path='dashboard' element={<Dashboard />} />
-                    <Route path='lessons' element={<Lessons />} />
-                    <Route path='lessons/:title' element={<Topic />} />
+            <Route path='admin' element={<ProtectedRoute />}>
+                <Route index element={<Navigate to='dashboard' />} />
+                <Route path='dashboard' element={<Dashboard />} />
+                <Route path='lessons'>
+                    <Route index element={<Lessons />} />
+                    <Route path=':title' element={<Topic />} />
+                    <Route path='new/topic' element={<CreateTopic />} />
+                </Route>
+                <Route path='quizzes'>
+                    <Route index element={<QuizList />} />
                 </Route>
             </Route>
         </Routes>

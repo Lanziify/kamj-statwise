@@ -1,10 +1,10 @@
 import React from 'react'
-import useLessons from '../../hooks/useLessons'
+import useLesson from '../../hooks/useLesson'
 import LessonCard from '../../components/LessonCard'
 import { LessonFields } from '../../types/fields'
 
 const Lessons = () => {
-    const { addLessonMutation, lessons, isLessonLoading } = useLessons()
+    const { addLessonMutation, lessons, isLessonLoading } = useLesson()
     const lessonCardRef = React.useRef(null)
 
     const onLessonSubmit = async (data: LessonFields) => {

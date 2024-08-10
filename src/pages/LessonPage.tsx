@@ -8,11 +8,11 @@ import {
     WrapItem,
 } from '@chakra-ui/react'
 import { NavLink, useNavigate } from 'react-router-dom'
-import useLessons from '../hooks/useLessons'
+import useLesson from '../hooks/useLesson'
 
 const LessonPage = () => {
     const navigate = useNavigate()
-    const { lessons } = useLessons()
+    const { lessons } = useLesson()
     return (
         <Stack>
             <Heading color='white' mb={4}>
@@ -28,6 +28,7 @@ const LessonPage = () => {
                             rounded='md'
                             padding={4}
                             borderColor='gray.700'
+                            height='max-content'
                         >
                             <Stack>
                                 <Heading

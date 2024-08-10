@@ -15,7 +15,12 @@ const AuthRoute = () => {
     return (
         <Flex minHeight='100vh' background='gray.900' direction='column'>
             <Header />
-            <Container maxWidth='6xl' flex={1}>
+            <Container
+                maxWidth='6xl'
+                flex={1}
+                display='flex'
+                flexDirection='column'
+            >
                 <Outlet />
             </Container>
         </Flex>

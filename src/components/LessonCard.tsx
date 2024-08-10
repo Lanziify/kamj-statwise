@@ -23,11 +23,12 @@ import { LessonFields } from '../types/fields'
 import { Modal } from './Modal'
 import { LessonData } from '../types/data'
 import LessonsAccordion from './LessonsAccordion'
+import { MdLibraryBooks } from 'react-icons/md'
 
 type LessonCardProps = {
     isLoading: boolean
-    onSubmit: (data: LessonFields) => Promise<void>
     lessons: LessonData[] | undefined
+    onSubmit: (data: LessonFields) => Promise<void>
 }
 
 type ChildMethods = {
@@ -46,7 +47,7 @@ const LessonCard = React.forwardRef<ChildMethods, LessonCardProps>(
             register,
             formState: { errors, isSubmitting },
             reset,
-        } = useForm({
+        } = useForm<LessonFields>({
             defaultValues: {
                 title: '',
                 description: '',
@@ -84,7 +85,10 @@ const LessonCard = React.forwardRef<ChildMethods, LessonCardProps>(
                     ref={lessonCardRef}
                     color='white'
                     rounded='md'
-                    background='gray.800'
+                    background='gray.900'
+                    borderWidth={1}
+                    borderColor='gray.700'
+                    shadow='none'
                     visibility={props.isLoading ? 'hidden' : 'visible'}
                 >
                     <CardHeader>
@@ -93,7 +97,10 @@ const LessonCard = React.forwardRef<ChildMethods, LessonCardProps>(
                             alignItems='center'
                             mb={4}
                         >
-                            <Heading size='md'>My Lessons</Heading>
+                            <Flex alignItems='center' gap={2}>
+                                <MdLibraryBooks size={24} />
+                                <Heading size='md'>My Lessons</Heading>
+                            </Flex>
                             <IconButton
                                 size='sm'
                                 colorScheme='yellow'
@@ -115,7 +122,7 @@ const LessonCard = React.forwardRef<ChildMethods, LessonCardProps>(
                         </Text>
                     </CardHeader>
                     <CardBody pt={0}>
-                        <LessonsAccordion lessons={props.lessons}/>
+                        <LessonsAccordion lessons={props.lessons} />
                     </CardBody>
                 </Card>
                 <Modal

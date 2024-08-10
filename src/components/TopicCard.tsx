@@ -24,6 +24,7 @@ type LessonCardProps = {
     isLoading: boolean
     lessons: LessonData[] | undefined
     onSubmit: (data: TopicFields) => Promise<void>
+    lessonState?: LessonData[]
 }
 
 type ChildMethods = {
@@ -44,7 +45,7 @@ const TopicCard = React.forwardRef<ChildMethods, LessonCardProps>(
             setValue,
         } = useForm<TopicFields>({
             defaultValues: {
-                lesson_id: '',
+                lesson_id: props.lessonState ? props.lessonState[0]?.id : '',
                 title: '',
                 description: '',
                 content: '',
@@ -90,7 +91,9 @@ const TopicCard = React.forwardRef<ChildMethods, LessonCardProps>(
                             mb={4}
                         >
                             <Heading size='md' color='white'>
-                                Create new topic
+                                {props.lessonState && props.lessonState[0]
+                                    ? props.lessonState[0].title
+                                    : 'Create new topic'}
                             </Heading>
                             {/* <IconButton
                             size='sm'
@@ -106,10 +109,16 @@ const TopicCard = React.forwardRef<ChildMethods, LessonCardProps>(
                             elit. At, repellendus!
                         </Text>
                     </CardHeader>
-                    <CardBody>
+                    <CardBody paddingTop={0}>
                         <form onSubmit={handleSubmit(props.onSubmit)}>
                             <Stack>
-                                <FormControl isInvalid={!!errors.lesson_id}>
+                                <FormControl
+                                    isInvalid={!!errors.lesson_id}
+                                    hidden={Boolean(
+                                        props.lessonState &&
+                                            props.lessonState[0]
+                                    )}
+                                >
                                     <Select
                                         {...register('lesson_id', {
                                             required: 'Lesson is required',
@@ -144,7 +153,7 @@ const TopicCard = React.forwardRef<ChildMethods, LessonCardProps>(
                                             errors.lesson_id.message}
                                     </FormErrorMessage>
                                 </FormControl>
-                                <FormControl mt={4} isInvalid={!!errors.title}>
+                                <FormControl isInvalid={!!errors.title}>
                                     <Input
                                         {...register('title', {
                                             required: 'Please add a topic name',
@@ -175,10 +184,10 @@ const TopicCard = React.forwardRef<ChildMethods, LessonCardProps>(
                                         }}
                                     />
                                 </FormControl>
-                                <FormControl>
+                                <FormControl isInvalid={!!errors.content}>
                                     <JoditEditor
                                         value={control._formValues['content']}
-                                        onChange={(newContent) =>
+                                        onBlur={(newContent) =>
                                             setValue('content', newContent)
                                         }
                                         config={{

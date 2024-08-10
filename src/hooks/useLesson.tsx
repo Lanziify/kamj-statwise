@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { LessonFields } from '../types/fields'
 import { LessonData } from '../types/data'
 
-const useLessons = () => {
+const useLesson = () => {
     const { token } = useAuth()
     const axios = useAxiosInterceptor(token as string)
     const queryClient = useQueryClient()
@@ -50,14 +50,25 @@ const useLessons = () => {
         },
     })
 
+    const { mutateAsync: addTopicMutation } = useMutation({
+        mutationKey: ['addTopic'],
+        mutationFn: (data: LessonFields) => {
+            return axios.post('topics', { ...data })
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['lessons'] })
+        },
+    })
+
     return {
         lessons,
         lessonError,
         isLessonLoading,
         addLessonMutation,
+        addTopicMutation,
         deleteLessonMutation,
         deleteTopicMutation,
     }
 }
 
-export default useLessons
+export default useLesson

@@ -4,8 +4,14 @@ export type LessonFields = {
 }
 
 export type TopicFields = {
-    lesson_id: string | number
+    lesson_id: number | string
     title: string
     description: string
     content: string
+}
+
+export type QuizFields = {
+    topic_id: number | string
+    title: string
+    description: string
 }

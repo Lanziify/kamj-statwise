@@ -8,13 +8,13 @@ import {
     MenuList,
     Text,
 } from '@chakra-ui/react'
-import { IoMenuOutline } from 'react-icons/io5'
+import { IoExtensionPuzzle, IoMenuOutline } from 'react-icons/io5'
 import React from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { Link } from 'react-scroll'
 import { FaBook, FaGamepad, FaImage, FaLock, FaPencil } from 'react-icons/fa6'
 import { useAuth } from '../context/Auth'
-import { MdOutlineDashboard } from 'react-icons/md'
+import { MdLibraryBooks, MdOutlineDashboard } from 'react-icons/md'
 import { BiLogOut } from 'react-icons/bi'
 import BreadCrumbs from './BreadCrumbs'
 
@@ -61,7 +61,19 @@ const Header = () => {
         {
             label: 'Dashboard',
             icon: <MdOutlineDashboard />,
-            path: 'admin/dashboard',
+            path: '/admin/dashboard',
+            as: NavLink,
+        },
+        {
+            label: 'My Lessons',
+            icon: <MdLibraryBooks />,
+            path: '/admin/lessons',
+            as: NavLink,
+        },
+        {
+            label: 'My Quizzes',
+            icon: <IoExtensionPuzzle />,
+            path: '/admin/quizzes',
             as: NavLink,
         },
         // {
