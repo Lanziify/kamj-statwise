@@ -20,6 +20,12 @@ const useTopic = () => {
         },
     })
 
+    const { mutateAsync: getTopic, isPending: isGetTopicLoading, isError: isGetTopicError} = useMutation({
+        mutationFn: (topicID: string) => {
+            return axios.get(`topics/${topicID}`)
+        },
+    })
+
     const { mutateAsync: addTopicMutation } = useMutation({
         mutationKey: ['addTopic'],
         mutationFn: (data: TopicFields) => {
@@ -44,6 +50,9 @@ const useTopic = () => {
         topics,
         topicsError,
         isTopicsLoading,
+        isGetTopicLoading,
+        isGetTopicError,
+        getTopic,
         addTopicMutation,
         deleteTopicMutation,
     }

@@ -16,6 +16,7 @@ import Lessons from './pages/protected/Lessons'
 import Topic from './pages/protected/Topic'
 import CreateTopic from './pages/protected/CreateTopic'
 import QuizList from './pages/protected/QuizList'
+import QuizItem from './pages/protected/QuizItem'
 
 function App() {
     return (
@@ -38,11 +39,13 @@ function App() {
                 <Route path='dashboard' element={<Dashboard />} />
                 <Route path='lessons'>
                     <Route index element={<Lessons />} />
-                    <Route path=':title' element={<Topic />} />
+                    <Route path='topic/:id' element={<Topic />} />
                     <Route path='new/topic' element={<CreateTopic />} />
                 </Route>
                 <Route path='quizzes'>
                     <Route index element={<QuizList />} />
+                    <Route path='topic/:id' element={<Topic />} />
+                    <Route path=':id' element={<QuizItem />} />
                 </Route>
             </Route>
         </Routes>

@@ -14,6 +14,7 @@ import {
     MenuItem,
     MenuList,
     Stack,
+    Text,
     useDisclosure,
     useToast,
 } from '@chakra-ui/react'
@@ -63,12 +64,12 @@ const AccordionTopicListItem: React.FC<AccordionListItemType> = ({
         },
     ]
 
-    const getLocation = (topic: string) => {
+    const getLocation = (id: number) => {
         const pathnames = location.pathname.split('/').slice(1)
         if (pathnames.includes('dashboard')) {
-            return `/${pathnames[0]}/lessons/${topic}`
+            return `/${pathnames[0]}/lessons/topic/${id}`
         }
-        return topic
+        return `topic/${id}`
     }
 
     const handleDeleteClick = (item: LessonData | TopicData) => {
@@ -98,7 +99,7 @@ const AccordionTopicListItem: React.FC<AccordionListItemType> = ({
                 <ListItem
                     key={topic.id}
                     sx={{
-                        paddingX: 2,
+                        // paddingX: 2,
                         rounded: 'md',
                         display: 'flex',
                         alignItems: 'center',
@@ -108,11 +109,16 @@ const AccordionTopicListItem: React.FC<AccordionListItemType> = ({
                 >
                     <Button
                         as={NavLink}
+                        // display='flex'
+                        // justifyContent='flex-start'
+                        // textOverflow='ellipsis'
                         color='white'
                         variant='ghost'
+                        // whiteSpace='normal'
+                        // wordBreak='break-word'
                         size='sm'
                         fontWeight={500}
-                        to={getLocation(topic.title)}
+                        to={getLocation(topic.id)}
                         state={{
                             ...topic,
                         }}
@@ -121,7 +127,7 @@ const AccordionTopicListItem: React.FC<AccordionListItemType> = ({
                             background: 'gray.600',
                         }}
                     >
-                        {topic.title}
+                        <Text isTruncated>{topic.title}</Text>
                     </Button>
                     <Menu>
                         <MenuButton

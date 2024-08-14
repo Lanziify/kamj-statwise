@@ -1,39 +1,32 @@
 import {
     Box,
     Button,
-    FormControl,
-    FormErrorMessage,
-    FormLabel,
+    Flex,
     Heading,
     IconButton,
-    Input,
     Popover,
-    PopoverArrow,
     PopoverBody,
     PopoverContent,
     PopoverHeader,
     PopoverTrigger,
     Portal,
-    Select,
     Stack,
-    Text,
-    Textarea,
     useDisclosure,
     useToast,
 } from '@chakra-ui/react'
 import React from 'react'
 import { Modal } from '../../components/Modal'
-import { useForm } from 'react-hook-form'
-import { QuizFields } from '../../types/fields'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import useTopic from '../../hooks/useTopic'
 import useQuiz from '../../hooks/useQuiz'
 import { QuizData } from '../../types/data'
 
 import DataTable, { TableColumn } from 'react-data-table-component'
-import { IoEllipsisHorizontal, IoTrashBin } from 'react-icons/io5'
-import { FaFileLines, FaPlus } from 'react-icons/fa6'
-import { FaClock, FaInfoCircle, FaTrash } from 'react-icons/fa'
+import { IoEllipsisHorizontal } from 'react-icons/io5'
+import { FaFileLines, FaPlus, FaRegCircleDot } from 'react-icons/fa6'
+import { FaClock, FaInfoCircle, FaList, FaTrash } from 'react-icons/fa'
+import { rdtCustomStyle } from '../../utils/rdt-custom-style'
+import CreateQuizForm from '../../components/forms/CreateQuizForm'
 
 type QuizActionProps = {
     name: string
@@ -41,12 +34,30 @@ type QuizActionProps = {
     onClick: (data: QuizData) => void
 }
 
+type ModalContent = {
+    title: string
+    content: JSX.Element
+}
+
 const QuizList = () => {
     const location = useLocation()
+    const [isSubmitting, setIsSubmitting] = React.useState(false)
+    const [modalContent, setModalContent] = React.useState<ModalContent | null>(
+        null
+    )
     const toast = useToast()
+    const navigate = useNavigate()
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const { topics, isTopicsLoading } = useTopic()
-    const { quizzes, isQuizzesLoading, addQuiz } = useQuiz()
+    const { topics } = useTopic()
+    const {
+        quizzes,
+        isQuizzesLoading,
+        deleteQuiz,
+        onPageChange,
+        onChangeRowsPerPage,
+        defaultQuizPage,
+        totalQuizzes,
+    } = useQuiz()
 
     const quizActions: QuizActionProps[] = [
         {
@@ -57,7 +68,19 @@ const QuizList = () => {
         {
             name: 'View Topic',
             icon: <FaFileLines size={11} />,
-            onClick: () => {},
+            onClick: (quiz) => {
+                const topic = topics?.filter((t) => t.id === quiz.topic.id)[0]
+                navigate(`/admin/quizzes/topic/${quiz.topic.id}`, {
+                    state: { ...topic },
+                })
+            },
+        },
+        {
+            name: 'View Quiz Items',
+            icon: <FaList size={11} />,
+            onClick: (quiz) => {
+                navigate(`${quiz.id}`, {state: quiz})
+            },
         },
         {
             name: 'Set Time Limit',
@@ -65,311 +88,245 @@ const QuizList = () => {
             onClick: () => {},
         },
         {
+            name: 'Set Status',
+            icon: <FaRegCircleDot size={11} />,
+            onClick: () => {},
+        },
+        {
             name: 'Remove',
             icon: <FaTrash size={11} />,
-            onClick: () => {},
+            onClick: async (quiz) => {
+                try {
+                    const response = await deleteQuiz(quiz)
+                    toast({
+                        title: response.data.title,
+                        description: response.data.message,
+                        status: 'success',
+                        duration: 9000,
+                        isClosable: true,
+                    })
+                } catch (error: any) {
+                    console.log(error.message)
+                }
+            },
         },
         {
             name: 'Details',
             icon: <FaInfoCircle size={11} />,
-            onClick: () => {},
-        },
-    ]
-
-    const columns: TableColumn<QuizData>[] = [
-        {
-            width: 'max-content',
-            name: 'Title',
-            selector: (row) => row.title,
-            sortable: true,
-        },
-        {
-            // hide: 'sm',
-            name: 'Description',
-            selector: (row) => row.description,
-            sortable: true,
-            wrap: true,
-        },
-        {
-            grow: 1,
-            hide: 'sm',
-            center: true,
-            name: 'Time Limit',
-            selector: (row) => row.time_limit,
-            sortable: true,
-        },
-        {
-            width: 'max-content',
-            name: 'Actions',
-            right: true,
-            cell: (row) => (
-                <Popover trigger='hover'>
-                    <PopoverTrigger>
-                        <IconButton
-                            size='sm'
-                            color='white'
-                            variant='ghost'
-                            aria-label='option'
-                            icon={<IoEllipsisHorizontal />}
-                            _hover={{
-                                color: 'whiteAlpha.800',
-                                backgroundColor: 'gray.600',
-                            }}
-                            _active={{
-                                color: 'whiteAlpha.800',
-                                backgroundColor: 'gray.600',
-                            }}
-                        />
-                    </PopoverTrigger>
-                    <Portal>
-                        <PopoverContent
-                            width='fit-content'
-                            sx={{
-                                backgroundColor: 'gray.900',
-                                color: 'white',
-                                border: '1px solid #2D3748',
-                            }}
-                        >
-                            {/* <PopoverArrow
-                                bg='gray.900'
-                                shadowColor='gray.700'
-                            /> */}
-                            <PopoverHeader
-                                fontSize='sm'
-                                borderBottomColor='gray.700'
-                            >
-                                Actions
-                            </PopoverHeader>
-                            <PopoverBody padding={0}>
-                                <Stack spacing={0}>
-                                    {quizActions.map((action) => (
-                                        <Button
-                                            key={action.name}
-                                            display='flex'
-                                            gap={1}
-                                            justifyContent='flex-start'
-                                            fontWeight={500}
-                                            rounded='unset'
-                                            size='sm'
-                                            color='white'
-                                            background='transparent'
-                                            _hover={{
-                                                color: 'whiteAlpha.800',
-                                                backgroundColor: 'gray.700',
-                                            }}
-                                            leftIcon={action.icon}
-                                            onClick={() => action.onClick(row)}
-                                        >
-                                            {action.name}
-                                        </Button>
-                                    ))}
-                                </Stack>
-                            </PopoverBody>
-                            {/* <PopoverFooter>This is the footer</PopoverFooter> */}
-                        </PopoverContent>
-                    </Portal>
-                </Popover>
-            ),
-            sortable: true,
-            // right: true,
-            style: {
-                textAlign: 'right',
+            onClick: () => {
+                onOpen()
             },
         },
     ]
 
-    const {
-        register,
-        handleSubmit,
-        getValues,
-        formState: { errors, isSubmitting },
-        reset,
-    } = useForm<QuizFields>({
-        defaultValues: {
-            topic_id: location.state?.id || '',
-            title: '',
-            description: '',
-        },
-    })
+    const columns = React.useMemo<TableColumn<QuizData>[]>(
+        () => [
+            {
+                // grow: 0,
+                name: 'Title',
+                selector: (row) => row.title,
+                sortable: true,
+                wrap: true,
+            },
+            {
+                // width: 'max-content',
+                name: 'Topic',
+                wrap: true,
+                selector: (row) => row.topic.title,
+                sortable: true,
+            },
+            {
+                hide: 'sm',
+                name: 'Description',
+                selector: (row) => row.description,
+                sortable: true,
+                wrap: true,
+            },
+            {
+                grow: 1,
+                hide: 'md',
+                center: true,
+                name: 'Time Limit',
+                selector: (row) => row.time_limit,
+                sortable: true,
+            },
+            {
+                grow: 1,
+                hide: 'sm',
+                center: true,
+                name: 'Active',
+                selector: (row) => row.active,
+                cell: (row) => (
+                    <Box
+                        padding={2}
+                        rounded='full'
+                        bg={row.active ? 'green.500' : 'gray.600'}
+                    />
+                ),
+                sortable: true,
+            },
+            {
+                grow: 0,
+                // width: 'max-content',
+                name: 'Actions',
+                right: true,
+                cell: (row) => (
+                    <Popover trigger='hover'>
+                        <PopoverTrigger>
+                            <IconButton
+                                size='sm'
+                                color='white'
+                                variant='ghost'
+                                aria-label='option'
+                                icon={<IoEllipsisHorizontal />}
+                                _hover={{
+                                    color: 'whiteAlpha.800',
+                                    backgroundColor: 'gray.600',
+                                }}
+                                _active={{
+                                    color: 'whiteAlpha.800',
+                                    backgroundColor: 'gray.600',
+                                }}
+                            />
+                        </PopoverTrigger>
+                        <Portal>
+                            <PopoverContent
+                                width='fit-content'
+                                sx={{
+                                    backgroundColor: 'gray.900',
+                                    color: 'white',
+                                    border: '1px solid #2D3748',
+                                }}
+                            >
+                                {/* <PopoverArrow
+                                bg='gray.900'
+                                shadowColor='gray.700'
+                            /> */}
+                                <PopoverHeader
+                                    fontSize='sm'
+                                    borderBottomColor='gray.700'
+                                >
+                                    Actions
+                                </PopoverHeader>
+                                <PopoverBody padding={0}>
+                                    <Stack spacing={0}>
+                                        {quizActions.map((action) => (
+                                            <Button
+                                                key={action.name}
+                                                display='flex'
+                                                gap={1}
+                                                justifyContent='flex-start'
+                                                fontWeight={500}
+                                                rounded='unset'
+                                                size='sm'
+                                                color='white'
+                                                background='transparent'
+                                                _hover={{
+                                                    color: 'whiteAlpha.800',
+                                                    backgroundColor: 'gray.700',
+                                                }}
+                                                leftIcon={action.icon}
+                                                onClick={() =>
+                                                    action.onClick(row)
+                                                }
+                                            >
+                                                {action.name}
+                                            </Button>
+                                        ))}
+                                    </Stack>
+                                </PopoverBody>
+                                {/* <PopoverFooter>This is the footer</PopoverFooter> */}
+                            </PopoverContent>
+                        </Portal>
+                    </Popover>
+                ),
+                sortable: true,
+                // right: true,
+                style: {
+                    textAlign: 'right',
+                },
+            },
+        ],
+        []
+    )
 
-    const onSubmit = async (values: QuizFields) => {
-        try {
-            const response = await addQuiz(values)
-            toast({
-                title: 'Quiz created',
-                description: response.data.message,
-                status: 'success',
-                duration: 9000,
-                isClosable: true,
-            })
-            onClose()
-            reset()
-            window.history.replaceState({}, '')
-        } catch (error) {}
+    const onIsSubmitting = (value: boolean) => setIsSubmitting(value)
+
+    const TableHeader = () => {
+        return (
+            <Flex justifyContent='space-between' alignItems='center'>
+                <Heading>My Quizzes</Heading>
+                <IconButton
+                    size='sm'
+                    colorScheme='yellow'
+                    aria-label='lesson-add'
+                    color='gray.800'
+                    icon={<FaPlus />}
+                    onClick={() => {
+                        delete location.state
+                        setModalContent({
+                            title: 'New Quiz',
+                            content: (
+                                <CreateQuizForm
+                                    onClose={onClose}
+                                    isSubmitting={onIsSubmitting}
+                                />
+                            ),
+                        })
+                        // reset()
+                        onOpen()
+                    }}
+                />
+            </Flex>
+        )
     }
 
     React.useEffect(() => {
         if (location.state) {
+            setModalContent({
+                title: 'New Quiz',
+                content: (
+                    <CreateQuizForm
+                        topicState={location.state}
+                        onClose={onClose}
+                        isSubmitting={onIsSubmitting}
+                    />
+                ),
+            })
             onOpen()
         }
         window.history.replaceState({}, '')
     }, [location.state])
 
-    if (isTopicsLoading || isQuizzesLoading)
-        return <Text color='white'>Loading</Text>
-
     return (
         <Stack>
-            {/* <Heading color='white'>My Quizzes</Heading> */}
             <Box border='1px solid #2D3748' rounded='md'>
                 <DataTable
-                    title=''
+                    title={<TableHeader />}
                     columns={columns}
                     data={quizzes as QuizData[]}
+                    progressPending={isQuizzesLoading}
                     pagination
-                    // onRowClicked={}
-                    customStyles={{
-                        header: {
-                            style: {
-                                color: 'white',
-                                background: 'transparent',
-                            },
-                        },
-                        table: {
-                            style: {
-                                background: 'transparent',
-                            },
-                        },
-                        responsiveWrapper: {
-                            style: {
-                                borderRadius: 0,
-                            },
-                        },
-                        headRow: {
-                            style: {
-                                color: 'white',
-                                background: 'transparent',
-                                borderBottom: '1px solid #2D3748',
-                            },
-                        },
-                        rows: {
-                            style: {
-                                color: 'white',
-                                background: 'transparent',
-                                '&:not(:last-of-type)': {
-                                    borderBottom: '1px solid #2D3748',
-                                },
-                                '&:last-of-type': {
-                                    borderBottom: '1px solid #2D3748',
-                                },
-                            },
-                        },
-                        pagination: {
-                            style: {
-                                color: 'white',
-                                background: 'transparent',
-                                border: 'unset',
-                            },
-                            pageButtonsStyle: {
-                                color: 'white',
-                                '&:disabled': {
-                                    cursor: 'unset',
-                                    fill: '#2D3748',
-                                },
-                            },
-                        },
-                    }}
+                    paginationServer
+                    paginationRowsPerPageOptions={[
+                        10, 25, 50, 100, 200, 250, 500,
+                    ]}
+                    paginationDefaultPage={defaultQuizPage}
+                    onChangePage={onPageChange}
+                    onChangeRowsPerPage={onChangeRowsPerPage}
+                    paginationTotalRows={totalQuizzes}
+                    customStyles={rdtCustomStyle}
                 />
             </Box>
 
             <Modal
-                title='Create Quiz'
+                title={modalContent?.title}
                 isOpen={isOpen}
                 onClose={onClose}
                 isCentered
                 closeOnOverlayClick={!isSubmitting}
             >
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <Stack>
-                        <FormControl isInvalid={!!errors.topic_id}>
-                            <FormLabel color='white'>Topic</FormLabel>
-                            <Select
-                                {...register('topic_id', {
-                                    required: 'Please select a topic',
-                                })}
-                                placeholder='Select a topic'
-                                color='white'
-                                borderColor='gray.600'
-                                _focus={{
-                                    borderColor: 'yellow.500',
-                                    boxShadow:
-                                        '0 0 0 2px rgba(255, 255, 0, 0.5)',
-                                }}
-                                disabled={
-                                    getValues('topic_id') === location.state?.id
-                                }
-                                sx={{
-                                    option: {
-                                        borderColor: 'gray.700',
-                                        backgroundColor: 'gray.800',
-                                    },
-                                }}
-                            >
-                                {topics?.map((topic) => (
-                                    <option key={topic.id} value={topic.id}>
-                                        {topic.title}
-                                    </option>
-                                ))}
-                            </Select>
-                            <FormErrorMessage>
-                                {errors.topic_id && errors.topic_id.message}
-                            </FormErrorMessage>
-                        </FormControl>
-                        <FormControl isInvalid={!!errors.title}>
-                            <FormLabel color='white'>Quiz Title</FormLabel>
-                            <Input
-                                {...register('title', {
-                                    required:
-                                        'Please add title or name of the quiz',
-                                })}
-                                placeholder='Title'
-                                color='white'
-                                borderColor='gray.600'
-                                _focus={{
-                                    borderColor: 'yellow.500',
-                                    boxShadow:
-                                        '0 0 0 2px rgba(255, 255, 0, 0.5)',
-                                }}
-                            />
-                            <FormErrorMessage>
-                                {errors.title && errors.title.message}
-                            </FormErrorMessage>
-                        </FormControl>
-                        <FormControl>
-                            <FormLabel color='white'>
-                                Quiz Description
-                            </FormLabel>
-                            <Textarea
-                                {...register('description')}
-                                borderColor='gray.600'
-                                color='white'
-                                placeholder='Write your topic description here'
-                                _focus={{
-                                    borderColor: 'yellow.500',
-                                    boxShadow:
-                                        '0 0 0 2px rgba(255, 255, 0, 0.5)',
-                                }}
-                            />
-                        </FormControl>
-                        <Button
-                            type='submit'
-                            colorScheme='yellow'
-                            isLoading={isSubmitting}
-                        >
-                            Submit
-                        </Button>
-                    </Stack>
-                </form>
+                {modalContent?.content}
             </Modal>
         </Stack>
     )

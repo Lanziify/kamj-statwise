@@ -7,17 +7,45 @@ import { QuizData } from '../types/data'
 
 const useQuiz = () => {
     const { token } = useAuth()
+    const [page, setPage] = React.useState(1)
+    const [limit, setLimit] = React.useState(10)
+    const [total, setTotal] = React.useState(0)
     const axios = useAxiosInterceptor(token as string)
     const queryClient = useQueryClient()
 
     const {
         data: quizzes,
         isLoading: isQuizzesLoading,
-        error: quizzesError,
+        isError: isQuizzesError,
+        refetch: fetchQuizzes,
     } = useQuery({
-        queryKey: ['quizzes'],
+        queryKey: ['quizzes', page, limit],
         queryFn: async (): Promise<QuizData[]> => {
-            return (await axios.get('quizzes')).data.quizzes
+            const response = await axios.get(
+                `quizzes?page=${page}&limit=${limit}`
+            )
+            setTotal(response.data.total)
+            return response.data.quizzes
+        },
+    })
+
+    const onPageChange = (pageIndex: any) => {
+        setPage(pageIndex)
+        fetchQuizzes()
+        // queryClient.invalidateQueries({ queryKey: ['quizzes', page] })
+    }
+
+    const onChangeRowsPerPage = (pageLimit: number) => {
+        setLimit(pageLimit)
+        fetchQuizzes()
+        // queryClient.invalidateQueries({
+        //     queryKey: ['quizzes', limit],
+        // })
+    }
+
+    const { mutateAsync: getQuiz, isPending: isGetQuizLoading, isError: isGetQuizError} = useMutation({
+        mutationFn: (topicID: string) => {
+            return axios.get(`quizzes/${topicID}`)
         },
     })
 
@@ -31,7 +59,31 @@ const useQuiz = () => {
         },
     })
 
-    return { quizzes, isQuizzesLoading, quizzesError, addQuiz }
+    const { mutateAsync: deleteQuiz } = useMutation({
+        mutationKey: ['addQuiz'],
+        mutationFn: (quiz: QuizData) => {
+            return axios.delete(`quizzes/${quiz.id}`)
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['quizzes'] })
+        },
+    })
+
+
+    return {
+        quizzes,
+        isQuizzesLoading,
+        isGetQuizLoading,
+        isQuizzesError,
+        isGetQuizError,
+        getQuiz,
+        addQuiz,
+        deleteQuiz,
+        onPageChange,
+        onChangeRowsPerPage,
+        defaultQuizPage: page,
+        totalQuizzes: total,
+    }
 }
 
 export default useQuiz

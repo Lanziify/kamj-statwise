@@ -28,25 +28,27 @@ const LessonPage = () => {
                             rounded='md'
                             padding={4}
                             borderColor='gray.700'
-                            height='max-content'
+                            minWidth='xs'
+                            // height='max-content'
                         >
                             <Stack>
                                 <Heading
                                     as='div'
                                     size='sm'
                                     color='white'
-                                    whiteSpace='nowrap'
+                                    // whiteSpace='nowrap'
                                 >
                                     {lesson.title}
                                 </Heading>
-                                <List>
+                                <List listStyleType=''>
                                     {lesson.topics.map((topic) => (
                                         <ListItem
+                                        ml={4}
                                             key={topic.id}
                                             color='gray.400'
                                             fontSize='xs'
                                             textDecoration='underline'
-                                            whiteSpace='nowrap'
+                                            // whiteSpace='nowrap'
                                         >
                                             <NavLink
                                                 to={topic.title}
