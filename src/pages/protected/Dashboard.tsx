@@ -18,7 +18,7 @@ const Dashboard = () => {
     const { tokenPayload } = useAuth()
     const { lessons } = useLesson()
     const { topics } = useTopic()
-    const { totalQuizzes } = useQuiz()
+    const { totalQuiz } = useQuiz()
 
     const stats = [
         {
@@ -31,7 +31,7 @@ const Dashboard = () => {
         },
         {
             label: 'Quizzes',
-            number: totalQuizzes || 0,
+            number: totalQuiz || 0,
         },
     ]
 

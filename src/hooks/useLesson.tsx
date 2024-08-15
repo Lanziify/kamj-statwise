@@ -20,6 +20,16 @@ const useLesson = () => {
         },
     })
 
+    const { mutateAsync: getLesson, isPending: isGetLessonLoading, isError: isGetLessonError} = useMutation({
+        mutationFn: ({ lessonId, topicId }: { lessonId: string; topicId?: string }) => {
+            return axios.get(`lessons/${lessonId}}`, {
+                params: {
+                    topic: topicId
+                }
+            })
+        },
+    })
+
     const { mutateAsync: addLessonMutation } = useMutation({
         mutationKey: ['addLesson'],
         mutationFn: (data: LessonFields) => {
@@ -62,8 +72,11 @@ const useLesson = () => {
 
     return {
         lessons,
-        lessonError,
         isLessonLoading,
+        isGetLessonLoading,
+        lessonError,
+        isGetLessonError,
+        getLesson,
         addLessonMutation,
         addTopicMutation,
         deleteLessonMutation,

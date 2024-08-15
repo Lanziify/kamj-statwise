@@ -61,10 +61,9 @@ const cards = [
 ]
 
 const IndexPage = () => {
-
     return (
         <div>
-            <Header/>
+            <Header />
             {/* Hero */}
             <Flex
                 id='hero'
@@ -115,7 +114,10 @@ const IndexPage = () => {
                     >
                         <Highlight
                             query={['KAMJ', 'STATWISE']}
-                            styles={{ color: 'yellow.400', fontWeight: 'black' }}
+                            styles={{
+                                color: 'yellow.400',
+                                fontWeight: 'black',
+                            }}
                         >
                             Welcome To KAMJ StatWise
                         </Highlight>
@@ -145,7 +147,7 @@ const IndexPage = () => {
                             base: '2xl',
                         }}
                         textAlign='center'
-                        color='yellow'
+                        color='yellow.400'
                     >
                         <Highlight
                             query={['Our Featured Contents']}
@@ -222,11 +224,11 @@ const IndexPage = () => {
                                 </CardBody>
                                 <CardFooter>
                                     <Button
+                                        color='yellow.400'
                                         size='sm'
                                         variant='ghost'
                                         marginLeft='auto'
                                         as={NavLink}
-                                        colorScheme='yellow'
                                         _hover={{
                                             backgroundColor: 'whiteAlpha.200',
                                         }}

@@ -21,9 +21,12 @@ const useQuiz = () => {
     } = useQuery({
         queryKey: ['quizzes', page, limit],
         queryFn: async (): Promise<QuizData[]> => {
-            const response = await axios.get(
-                `quizzes?page=${page}&limit=${limit}`
-            )
+            const response = await axios.get(`quizzes`, {
+                params: {
+                    page: page,
+                    limit: limit,
+                }
+            })
             setTotal(response.data.total)
             return response.data.quizzes
         },
@@ -43,9 +46,20 @@ const useQuiz = () => {
         // })
     }
 
-    const { mutateAsync: getQuiz, isPending: isGetQuizLoading, isError: isGetQuizError} = useMutation({
+    const {
+        mutateAsync: getQuiz,
+        isPending: isGetQuizLoading,
+        isError: isGetQuizError,
+    } = useMutation({
         mutationFn: (topicID: string) => {
             return axios.get(`quizzes/${topicID}`)
+        },
+    })
+
+    const { data: totalQuiz } = useQuery({
+        queryKey: ['total'],
+        queryFn: async () => {
+            return (await axios.get('quizzes/total')).data.total
         },
     })
 
@@ -69,13 +83,13 @@ const useQuiz = () => {
         },
     })
 
-
     return {
         quizzes,
         isQuizzesLoading,
         isGetQuizLoading,
         isQuizzesError,
         isGetQuizError,
+        totalQuiz,
         getQuiz,
         addQuiz,
         deleteQuiz,

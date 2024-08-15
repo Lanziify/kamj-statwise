@@ -34,6 +34,7 @@ const QuizItem = () => {
                     location.pathname.lastIndexOf('/') + 1
                 )
                 const response = await getQuiz(id)
+                console.log(response.data.data)
                 location.state = response.data.data
             }
             getTopicFromDb()
@@ -70,35 +71,36 @@ const QuizItem = () => {
     return (
         <Stack>
             <Heading color='white'>{location.state.title}</Heading>
-            <Text color='white' mb={4}>{location.state.description}</Text>
-            {location.state &&
-                location.state.items.map((item, index) => (
-                    <Box key={item.id} padding={4} rounded='md'>
-                        <Heading color='white' fontSize='2xl' mb={4}>
-                            {index + 1}. {item.question}
-                        </Heading>
-                        <Wrap>
-                            {item.choices.map((choice) => (
-                                <WrapItem
-                                    mt={4}
-                                    ml={8}
-                                    flex={1}
-                                    key={choice.id}
-                                    minW='md'
-                                    textColor='white'
-                                    fontStyle='xs'
-                                >
-                                    <Radio colorScheme='yellow'>
-                                        {choice.label}
-                                    </Radio>
-                                </WrapItem>
-                            ))}
-                        </Wrap>
-                        <Text mt={4} color='white'>
-                            Answer: {item.choices[item.answer - 1].label}
-                        </Text>
-                    </Box>
-                ))}
+            <Text color='white' mb={4}>
+                {location.state.description}
+            </Text>
+            {location.state.items.map((item, index) => (
+                <Box key={item.id} padding={4} rounded='md'>
+                    <Heading color='white' fontSize='2xl' mb={4}>
+                        {index + 1}. {item.question}
+                    </Heading>
+                    <Wrap>
+                        {item.choices.map((choice) => (
+                            <WrapItem
+                                mt={4}
+                                ml={8}
+                                flex={1}
+                                key={choice.id}
+                                minW='md'
+                                textColor='white'
+                                fontStyle='xs'
+                            >
+                                <Radio colorScheme='yellow'>
+                                    {choice.label}
+                                </Radio>
+                            </WrapItem>
+                        ))}
+                    </Wrap>
+                    <Text mt={4} color='white'>
+                        Answer: {item.choices[item.answer - 1].label}
+                    </Text>
+                </Box>
+            ))}
         </Stack>
     )
 }

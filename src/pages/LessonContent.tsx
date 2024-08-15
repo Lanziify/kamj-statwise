@@ -1,30 +1,46 @@
 import { Flex, Heading, Stack, Text } from '@chakra-ui/react'
 import { useLocation } from 'react-router-dom'
-import useTopic from '../../hooks/useTopic'
 import React from 'react'
+import useLesson from '../hooks/useLesson'
+import { LessonData, TopicData } from '../types/data'
+import NoContent from '../components/NoContent'
+import useTopic from '../hooks/useTopic'
 
-const Topic = () => {
-    const location = useLocation()
-    const [topicData, setTopicData] = React.useState(location.state || null)
-    const { topics, isGetTopicLoading, isGetTopicError, getTopic } = useTopic()
+type LessonLocation = {
+    hash: string
+    key: string
+    pathname: string
+    state: TopicData
+}
+
+const LessonContent = () => {
+    const location: LessonLocation = useLocation()
+    const [topicData, setTopicData] = React.useState<TopicData | null>(location.state || null)
+
+    const { topics } = useTopic()
 
     React.useEffect(() => {
         if (!location.state) {
-            const getLesson = () => {
-                const topicURI = decodeURIComponent(
-                    location.pathname.substring(location.pathname.lastIndexOf('/') + 1)
+            const getLessonFromDb = async () => {
+                const topicTitle = location.pathname.substring(
+                    location.pathname.lastIndexOf('/') + 1
                 )
 
+                const topicURI = decodeURIComponent(topicTitle)
+
                 const topic = topics?.find((topic) => topic.title === topicURI)
+
+                console.log(topic)
 
                 if (topic) {
                     setTopicData(topic)
                 }
             }
-
-            getLesson()
+            getLessonFromDb()
         }
     }, [topics, topicData, location.state])
+
+    if (!topicData) return <NoContent />
 
     return (
         <Stack p={4}>
@@ -44,4 +60,4 @@ const Topic = () => {
     )
 }
 
-export default Topic
+export default LessonContent

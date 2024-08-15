@@ -10,7 +10,7 @@ import {
 import React from 'react'
 
 type CustomModalProps = ChakraModalProps & {
-    title: string | undefined
+    title?: string | JSX.Element | undefined 
 
     children: React.ReactNode
 }

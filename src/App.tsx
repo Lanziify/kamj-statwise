@@ -2,7 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import './App.css'
 import IndexPage from './pages/IndexPage'
 import PublicRoute from './routes/Public'
-import LessonPage from './pages/LessonPage'
+import PublicLessons from './pages/PublicLessons'
 import QuizMenuPage from './pages/QuizMenuPage'
 import QuizPage from './pages/QuizPage'
 import ScorePage from './pages/ScorePage'
@@ -17,14 +17,21 @@ import Topic from './pages/protected/Topic'
 import CreateTopic from './pages/protected/CreateTopic'
 import QuizList from './pages/protected/QuizList'
 import QuizItem from './pages/protected/QuizItem'
+import LessonContent from './pages/LessonContent'
+import LessonItem from './pages/LessonItem'
 
 function App() {
     return (
         <Routes>
             <Route path='/' index element={<IndexPage />} />
             <Route element={<PublicRoute />}>
-                <Route path='lessons' element={<LessonPage />} />
-                <Route path='lessons/:title' element={<Topic />} />
+                <Route path='lessons' element={<PublicLessons />} />
+                <Route path='lessons/:id' element={<LessonItem />} />
+                <Route
+                    path='lessons/:id/topic/:id'
+                    element={<LessonContent />}
+                />
+                {/* <Route path='lessons/:id' element={<LessonContent />} /> */}
                 <Route path='quiz' element={<QuizMenuPage />} />
                 <Route path='quiz/:id' element={<QuizPage />} />
                 <Route path='quiz/score' element={<ScorePage />} />
@@ -44,6 +51,7 @@ function App() {
                 </Route>
                 <Route path='quizzes'>
                     <Route index element={<QuizList />} />
+                    <Route path='topic' element={<Navigate to='/admin/quizzes' />} />
                     <Route path='topic/:id' element={<Topic />} />
                     <Route path=':id' element={<QuizItem />} />
                 </Route>

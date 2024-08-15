@@ -1,18 +1,18 @@
 import {
-    Container,
     Heading,
     List,
     ListItem,
     Stack,
+    Text,
     Wrap,
     WrapItem,
 } from '@chakra-ui/react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import useLesson from '../hooks/useLesson'
 
-const LessonPage = () => {
-    const navigate = useNavigate()
+const PublicLessons = () => {
     const { lessons } = useLesson()
+
     return (
         <Stack>
             <Heading color='white' mb={4}>
@@ -32,29 +32,24 @@ const LessonPage = () => {
                             // height='max-content'
                         >
                             <Stack>
-                                <Heading
-                                    as='div'
-                                    size='sm'
-                                    color='white'
-                                    // whiteSpace='nowrap'
-                                >
+                                <Heading as='div' size='sm' color='white'>
                                     {lesson.title}
                                 </Heading>
-                                <List listStyleType=''>
+                                <Text color='gray.400' fontSize='sm'>
+                                    {lesson.description}
+                                </Text>
+                                <List listStyleType='' mt={4}>
                                     {lesson.topics.map((topic) => (
                                         <ListItem
-                                        ml={4}
+                                            ml={4}
                                             key={topic.id}
                                             color='gray.400'
-                                            fontSize='xs'
+                                            fontSize='sm'
                                             textDecoration='underline'
-                                            // whiteSpace='nowrap'
                                         >
                                             <NavLink
-                                                to={topic.title}
-                                                state={{
-                                                    ...topic,
-                                                }}
+                                                to={`${lesson.title}/topic/${topic.title}`}
+                                                state={topic}
                                             >
                                                 {topic.title}
                                             </NavLink>
@@ -69,4 +64,4 @@ const LessonPage = () => {
     )
 }
 
-export default LessonPage
+export default PublicLessons

@@ -14,11 +14,11 @@ const BreadCrumbs = () => {
     const getPath = (path: string) => {
         const pathIndex = pathnames.indexOf(path)
 
-        if (pathnames.length - 1 == pathIndex) return
+        if (pathnames.length - 1 === pathIndex) return
 
-        if (pathIndex <= 1) {
-            return `/${pathnames.slice(0, pathIndex + 1).join('/')}`
-        }
+        // if (pathIndex != pathnames.length - 1) {
+        return `/${pathnames.slice(0, pathIndex + 1).join('/')}`
+        // }
     }
 
     return (
@@ -31,10 +31,19 @@ const BreadCrumbs = () => {
             paddingBottom={2}
             hidden={pathnames.length <= 1}
         >
-            <Breadcrumb separator='/' color='white'>
-                {pathnames.map((pathname) => (
-                    <BreadcrumbItem key={pathname}>
-                        <BreadcrumbLink as={NavLink} to={getPath(pathname)}>
+            <Breadcrumb separator='/' color='white' overflow='auto'>
+                {pathnames.map((pathname, index) => (
+                    <BreadcrumbItem key={index}>
+                        <BreadcrumbLink
+                            as={NavLink}
+                            to={getPath(pathname)}
+                            sx={{
+                                maxWidth: '5rem',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                            }}
+                        >
                             {pathname.charAt(0).toUpperCase() +
                                 pathname.slice(1)}
                         </BreadcrumbLink>

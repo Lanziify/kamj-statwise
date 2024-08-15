@@ -15,3 +15,10 @@ export type QuizFields = {
     title: string
     description: string
 }
+
+export type QuizItemFields = {
+    questionType: number | string
+    question: string
+    choices: []
+    answer: number | string
+}

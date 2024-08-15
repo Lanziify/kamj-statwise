@@ -1,15 +1,8 @@
 import {
     Box,
-    Button,
     Flex,
     Heading,
     IconButton,
-    Popover,
-    PopoverBody,
-    PopoverContent,
-    PopoverHeader,
-    PopoverTrigger,
-    Portal,
     Stack,
     useDisclosure,
     useToast,
@@ -22,17 +15,14 @@ import useQuiz from '../../hooks/useQuiz'
 import { QuizData } from '../../types/data'
 
 import DataTable, { TableColumn } from 'react-data-table-component'
-import { IoEllipsisHorizontal } from 'react-icons/io5'
-import { FaFileLines, FaPlus, FaRegCircleDot } from 'react-icons/fa6'
+import { FaFileLines, FaKey, FaPlus, FaRegCircleDot } from 'react-icons/fa6'
 import { FaClock, FaInfoCircle, FaList, FaTrash } from 'react-icons/fa'
 import { rdtCustomStyle } from '../../utils/rdt-custom-style'
 import CreateQuizForm from '../../components/forms/CreateQuizForm'
-
-type QuizActionProps = {
-    name: string
-    icon: JSX.Element
-    onClick: (data: QuizData) => void
-}
+import AddQuizItemForm from '../../components/forms/AddQuizItemForm'
+import CodesList from '../../components/CodesList'
+import { ActionMenu } from '../../types/props'
+import ActionButton from '../../components/ActionButton'
 
 type ModalContent = {
     title: string
@@ -59,18 +49,24 @@ const QuizList = () => {
         totalQuizzes,
     } = useQuiz()
 
-    const quizActions: QuizActionProps[] = [
+    const quizActions: ActionMenu<QuizData>[] = [
         {
-            name: 'Add Question Item',
+            name: 'Add Item',
             icon: <FaPlus size={11} />,
-            onClick: () => {},
+            onClick: () => {
+                setModalContent({
+                    title: 'Add Quiz Item',
+                    content: <AddQuizItemForm />,
+                })
+                onOpen()
+            },
         },
         {
             name: 'View Topic',
             icon: <FaFileLines size={11} />,
             onClick: (quiz) => {
                 const topic = topics?.filter((t) => t.id === quiz.topic.id)[0]
-                navigate(`/admin/quizzes/topic/${quiz.topic.id}`, {
+                navigate(`/admin/quizzes/topic/${quiz.topic.title}`, {
                     state: { ...topic },
                 })
             },
@@ -79,7 +75,18 @@ const QuizList = () => {
             name: 'View Quiz Items',
             icon: <FaList size={11} />,
             onClick: (quiz) => {
-                navigate(`${quiz.id}`, {state: quiz})
+                navigate(`${quiz.id}`, { state: quiz })
+            },
+        },
+        {
+            name: 'Quiz Codes',
+            icon: <FaKey size={11} />,
+            onClick: (quiz) => {
+                onOpen()
+                setModalContent({
+                    title: 'Quiz Codes',
+                    content: <CodesList quizId={quiz.id} />,
+                })
             },
         },
         {
@@ -170,76 +177,7 @@ const QuizList = () => {
                 // width: 'max-content',
                 name: 'Actions',
                 right: true,
-                cell: (row) => (
-                    <Popover trigger='hover'>
-                        <PopoverTrigger>
-                            <IconButton
-                                size='sm'
-                                color='white'
-                                variant='ghost'
-                                aria-label='option'
-                                icon={<IoEllipsisHorizontal />}
-                                _hover={{
-                                    color: 'whiteAlpha.800',
-                                    backgroundColor: 'gray.600',
-                                }}
-                                _active={{
-                                    color: 'whiteAlpha.800',
-                                    backgroundColor: 'gray.600',
-                                }}
-                            />
-                        </PopoverTrigger>
-                        <Portal>
-                            <PopoverContent
-                                width='fit-content'
-                                sx={{
-                                    backgroundColor: 'gray.900',
-                                    color: 'white',
-                                    border: '1px solid #2D3748',
-                                }}
-                            >
-                                {/* <PopoverArrow
-                                bg='gray.900'
-                                shadowColor='gray.700'
-                            /> */}
-                                <PopoverHeader
-                                    fontSize='sm'
-                                    borderBottomColor='gray.700'
-                                >
-                                    Actions
-                                </PopoverHeader>
-                                <PopoverBody padding={0}>
-                                    <Stack spacing={0}>
-                                        {quizActions.map((action) => (
-                                            <Button
-                                                key={action.name}
-                                                display='flex'
-                                                gap={1}
-                                                justifyContent='flex-start'
-                                                fontWeight={500}
-                                                rounded='unset'
-                                                size='sm'
-                                                color='white'
-                                                background='transparent'
-                                                _hover={{
-                                                    color: 'whiteAlpha.800',
-                                                    backgroundColor: 'gray.700',
-                                                }}
-                                                leftIcon={action.icon}
-                                                onClick={() =>
-                                                    action.onClick(row)
-                                                }
-                                            >
-                                                {action.name}
-                                            </Button>
-                                        ))}
-                                    </Stack>
-                                </PopoverBody>
-                                {/* <PopoverFooter>This is the footer</PopoverFooter> */}
-                            </PopoverContent>
-                        </Portal>
-                    </Popover>
-                ),
+                cell: (row) => <ActionButton actions={quizActions} row={row} />,
                 sortable: true,
                 // right: true,
                 style: {

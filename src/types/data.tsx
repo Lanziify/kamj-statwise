@@ -27,6 +27,7 @@ export interface QuizData {
     updated_at: string
     topic: QuizTopicData
     items: QuizItemData[]
+    codes: QuizCodeData[]
 }
 
 interface QuizTopicData {
@@ -45,4 +46,12 @@ export interface QuizItemData {
 export interface ChoiceData {
     id:    number;
     label: string;
+}
+
+
+export interface QuizCodeData {
+    id:         number;
+    code:       string;
+    topic?:     number;
+    expires_at: string;
 }
