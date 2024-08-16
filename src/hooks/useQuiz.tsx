@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import React from 'react'
 import { useAuth } from '../context/Auth'
 import useAxiosInterceptor from './useAxiosInterceptor'
-import { QuizFields } from '../types/fields'
+import { QuizFields, QuizItemFields } from '../types/fields'
 import { QuizData } from '../types/data'
 
 const useQuiz = () => {
@@ -25,7 +25,7 @@ const useQuiz = () => {
                 params: {
                     page: page,
                     limit: limit,
-                }
+                },
             })
             setTotal(response.data.total)
             return response.data.quizzes

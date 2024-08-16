@@ -37,7 +37,6 @@ interface QuizTopicData {
 
 export interface QuizItemData {
     id:               number;
-    question_type_id: number;
     question:         string;
     answer:           number;
     choices:          ChoiceData[];

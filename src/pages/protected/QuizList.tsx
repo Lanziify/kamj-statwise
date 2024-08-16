@@ -53,10 +53,10 @@ const QuizList = () => {
         {
             name: 'Add Item',
             icon: <FaPlus size={11} />,
-            onClick: () => {
+            onClick: (row) => {
                 setModalContent({
                     title: 'Add Quiz Item',
-                    content: <AddQuizItemForm />,
+                    content: <AddQuizItemForm quiz={row} onClose={onClose}/>,
                 })
                 onOpen()
             },

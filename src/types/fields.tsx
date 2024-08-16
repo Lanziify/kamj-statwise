@@ -17,8 +17,7 @@ export type QuizFields = {
 }
 
 export type QuizItemFields = {
-    questionType: number | string
     question: string
-    choices: []
+    choices: string[]
     answer: number | string
 }

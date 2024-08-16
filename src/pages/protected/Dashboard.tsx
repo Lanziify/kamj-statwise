@@ -13,12 +13,14 @@ import { useAuth } from '../../context/Auth'
 import useLesson from '../../hooks/useLesson'
 import useTopic from '../../hooks/useTopic'
 import useQuiz from '../../hooks/useQuiz'
+import useQuizCode from '../../hooks/useQuizCode'
 
 const Dashboard = () => {
     const { tokenPayload } = useAuth()
     const { lessons } = useLesson()
     const { topics } = useTopic()
     const { totalQuiz } = useQuiz()
+    const { quizCodes } = useQuizCode()
 
     const stats = [
         {
@@ -33,8 +35,11 @@ const Dashboard = () => {
             label: 'Quizzes',
             number: totalQuiz || 0,
         },
+        {
+            label: 'Codes',
+            number: quizCodes?.length || 0,
+        },
     ]
-
 
     return (
         <Stack spacing={4}>
@@ -54,18 +59,6 @@ const Dashboard = () => {
                     </Stat>
                 ))}
             </StatGroup>
-            <Divider />
-            <Heading as='h2' color='white' fontSize='2xl'>
-                Recently Added
-            </Heading>
-            <Text color='gray.400' fontSize='sm'>
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                Adipisci eius placeat error, labore, nihil architecto ducimus
-                laborum eum minus dolor, ipsam fugit neque libero beatae est vel
-                modi soluta voluptatibus nisi alias praesentium nulla quisquam
-                ullam! Ab suscipit ipsum blanditiis, delectus quaerat eos nulla
-                mollitia quam! Hic tempora explicabo corrupti.
-            </Text>
         </Stack>
     )
 }

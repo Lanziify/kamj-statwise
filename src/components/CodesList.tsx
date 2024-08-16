@@ -1,6 +1,6 @@
 import React, { ChangeEvent, FormEvent } from 'react'
 import DataTable, { TableColumn } from 'react-data-table-component'
-import { QuizCodeData, QuizData } from '../types/data'
+import { QuizCodeData } from '../types/data'
 import { rdtCustomStyle } from '../utils/rdt-custom-style'
 import {
     Button,
@@ -14,7 +14,6 @@ import {
 import moment from 'moment'
 import { Modal } from './Modal'
 import useQuizCode from '../hooks/useQuizCode'
-import useQuiz from '../hooks/useQuiz'
 import { FaTrash } from 'react-icons/fa'
 
 type QuizCodeList = {
@@ -80,8 +79,7 @@ const CodesList: React.FC<QuizCodeList> = (props) => {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
         try {
-            const response = await generateCode(props.quizId)
-            console.log(response)
+            await generateCode({quiz_id: props.quizId, expiration: expDate as string})
             onClose()
         } catch (error) {
             console.log(error)

@@ -8,7 +8,7 @@ type QuizCodeProp = {
     id: number
 }
 
-const useQuizCode = ({ id }: QuizCodeProp) => {
+const useQuizCode = (props?: QuizCodeProp) => {
     const { token } = useAuth()
     // const [id, setId] = React.useState<number | null>(null)
 
@@ -25,26 +25,30 @@ const useQuizCode = ({ id }: QuizCodeProp) => {
 
     const { mutateAsync: generateCode, isPending: isGenerateCodeLoading } =
         useMutation({
-            mutationFn: (quiz_id: number | string) => {
-                return axios.post(`quizzes/codes`, { quiz_id: quiz_id })
+            mutationFn: ({quiz_id, expiration}: {quiz_id: number, expiration: string}) => {
+                return axios.post(`quizzes/codes`, { quiz_id: quiz_id, expires_at: expiration })
             },
             onSuccess: () => {
                 queryClient.invalidateQueries({
                     queryKey: ['getQuizCode'],
                 })
+                refetchQuizCode()
             },
         })
 
     const getQuizCode = async (): Promise<QuizData | void> => {
-        return (await axios.get(`quizzes/${id}/codes`)).data
+        return (await axios.get(`quizzes/${props?.id}/codes`)).data
     }
 
-    const { data: getQuizCodeData, isLoading: isGetQuizCodeLoading } = useQuery(
-        {
-            queryKey: ['getQuizCode', id],
-            queryFn: getQuizCode,
-        }
-    )
+    const {
+        data: getQuizCodeData,
+        refetch: refetchQuizCode,
+        isLoading: isGetQuizCodeLoading,
+    } = useQuery({
+        queryKey: ['getQuizCode', props?.id],
+        queryFn: getQuizCode,
+        enabled: false,
+    })
 
     const { mutateAsync: deleteQuizCode } = useMutation({
         mutationFn: async (code_id: number) => {
@@ -54,8 +58,15 @@ const useQuizCode = ({ id }: QuizCodeProp) => {
             queryClient.invalidateQueries({
                 queryKey: ['getQuizCode'],
             })
+            refetchQuizCode()
         },
     })
+
+    React.useEffect(() => {
+        if (props?.id) {
+            refetchQuizCode()
+        }
+    }, [props?.id])
 
     return {
         quizCodes,
