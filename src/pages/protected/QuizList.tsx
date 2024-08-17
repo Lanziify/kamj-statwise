@@ -45,8 +45,8 @@ const QuizList = () => {
         deleteQuiz,
         onPageChange,
         onChangeRowsPerPage,
-        defaultQuizPage,
-        totalQuizzes,
+        // defaultQuizPage,
+        totalQuiz,
     } = useQuiz()
 
     const quizActions: ActionMenu<QuizData>[] = [
@@ -249,10 +249,11 @@ const QuizList = () => {
                     paginationRowsPerPageOptions={[
                         10, 25, 50, 100, 200, 250, 500,
                     ]}
-                    paginationDefaultPage={defaultQuizPage}
+                    // paginationDefaultPage={1}
                     onChangePage={onPageChange}
+                    
                     onChangeRowsPerPage={onChangeRowsPerPage}
-                    paginationTotalRows={totalQuizzes}
+                    paginationTotalRows={totalQuiz}
                     customStyles={rdtCustomStyle}
                 />
             </Box>

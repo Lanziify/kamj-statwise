@@ -1,4 +1,9 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import {
+    useInfiniteQuery,
+    useMutation,
+    useQuery,
+    useQueryClient,
+} from '@tanstack/react-query'
 import React from 'react'
 import { useAuth } from '../context/Auth'
 import useAxiosInterceptor from './useAxiosInterceptor'
@@ -9,7 +14,6 @@ const useQuiz = () => {
     const { token } = useAuth()
     const [page, setPage] = React.useState(1)
     const [limit, setLimit] = React.useState(10)
-    const [total, setTotal] = React.useState(0)
     const axios = useAxiosInterceptor(token as string)
     const queryClient = useQueryClient()
 
@@ -17,7 +21,6 @@ const useQuiz = () => {
         data: quizzes,
         isLoading: isQuizzesLoading,
         isError: isQuizzesError,
-        refetch: fetchQuizzes,
     } = useQuery({
         queryKey: ['quizzes', page, limit],
         queryFn: async (): Promise<QuizData[]> => {
@@ -27,23 +30,38 @@ const useQuiz = () => {
                     limit: limit,
                 },
             })
-            setTotal(response.data.total)
             return response.data.quizzes
+        },
+    })
+
+    const {
+        data: infiniteQuizzes,
+        isLoading: isInifiniteQuizzesLoading,
+        fetchNextPage,
+    } = useInfiniteQuery({
+        queryKey: ['infiniteQuizzes'],
+        queryFn: async ({ pageParam }: { pageParam: number }) => {
+            const response = await axios.get(`quizzes`, {
+                params: {
+                    page: pageParam,
+                    // limit: 20,
+                },
+            })
+            return response.data.quizzes
+        },
+        initialPageParam: 1,
+        getNextPageParam: (lastPage, pages) => {
+            // console.log(lastPage, pages)
+            return pages.length + 1
         },
     })
 
     const onPageChange = (pageIndex: any) => {
         setPage(pageIndex)
-        fetchQuizzes()
-        // queryClient.invalidateQueries({ queryKey: ['quizzes', page] })
     }
 
     const onChangeRowsPerPage = (pageLimit: number) => {
         setLimit(pageLimit)
-        fetchQuizzes()
-        // queryClient.invalidateQueries({
-        //     queryKey: ['quizzes', limit],
-        // })
     }
 
     const {
@@ -85,18 +103,20 @@ const useQuiz = () => {
 
     return {
         quizzes,
+        infiniteQuizzes,
         isQuizzesLoading,
+        isInifiniteQuizzesLoading,
         isGetQuizLoading,
         isQuizzesError,
         isGetQuizError,
         totalQuiz,
+        fetchNextPage,
         getQuiz,
         addQuiz,
         deleteQuiz,
         onPageChange,
         onChangeRowsPerPage,
         defaultQuizPage: page,
-        totalQuizzes: total,
     }
 }
 

@@ -25,12 +25,18 @@ function App() {
         <Routes>
             <Route path='/' index element={<IndexPage />} />
             <Route element={<PublicRoute />}>
-                <Route path='lessons' element={<PublicLessons />} />
-                <Route path='lessons/:id' element={<LessonItem />} />
-                <Route
-                    path='lessons/:id/topic/:id'
-                    element={<LessonContent />}
-                />
+                <Route path='lessons'>
+                    <Route index element={<PublicLessons />} />
+                    <Route path='/lessons/:id' element={<LessonItem />} />
+                    <Route
+                        path='/lessons/:id/topic'
+                        element={<Navigate to='/lessons' />}
+                    />
+                    <Route
+                        path='/lessons/:id/topic/:id'
+                        element={<LessonContent />}
+                    />
+                </Route>
                 {/* <Route path='lessons/:id' element={<LessonContent />} /> */}
                 <Route path='quiz' element={<QuizMenuPage />} />
                 <Route path='quiz/:id' element={<QuizPage />} />
@@ -51,7 +57,10 @@ function App() {
                 </Route>
                 <Route path='quizzes'>
                     <Route index element={<QuizList />} />
-                    <Route path='topic' element={<Navigate to='/admin/quizzes' />} />
+                    <Route
+                        path='topic'
+                        element={<Navigate to='/admin/quizzes' />}
+                    />
                     <Route path='topic/:id' element={<Topic />} />
                     <Route path=':id' element={<QuizItem />} />
                 </Route>

@@ -38,10 +38,13 @@ const PublicLessons = () => {
                                 <Text color='gray.400' fontSize='sm'>
                                     {lesson.description}
                                 </Text>
-                                <List listStyleType='' mt={4}>
+                                <List
+                                    mt={4}
+                                    listStyleType='circle'
+                                    listStylePos='inside'
+                                >
                                     {lesson.topics.map((topic) => (
                                         <ListItem
-                                            ml={4}
                                             key={topic.id}
                                             color='gray.400'
                                             fontSize='sm'

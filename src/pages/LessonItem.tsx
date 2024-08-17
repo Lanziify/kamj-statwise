@@ -68,10 +68,13 @@ const LessonItem = () => {
                             <Text color='gray.400' fontSize='sm'>
                                 {lessonData.description}
                             </Text>
-                            <List listStyleType=''>
+                            <List
+                                mt={4}
+                                listStyleType='circle'
+                                listStylePos='inside'
+                            >
                                 {lessonData.topics.map((topic) => (
                                     <ListItem
-                                        ml={4}
                                         key={topic.id}
                                         color='gray.400'
                                         fontSize='sm'

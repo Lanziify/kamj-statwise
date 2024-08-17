@@ -1,27 +1,14 @@
-import {
-    Box,
-    Flex,
-    Heading,
-    IconButton,
-    List,
-    ListItem,
-    Radio,
-    Stack,
-    Text,
-    useToast,
-    Wrap,
-    WrapItem,
-} from '@chakra-ui/react'
+import { List, ListItem, Stack, useToast } from '@chakra-ui/react'
 import { useLocation } from 'react-router-dom'
 import React from 'react'
-import useQuiz from '../../hooks/useQuiz'
 import { QuizData, QuizItemData } from '../../types/data'
 import useQuizItem from '../../hooks/useQuizItem'
 import { rdtCustomStyle } from '../../utils/rdt-custom-style'
 import DataTable, { TableColumn } from 'react-data-table-component'
-import { FaPlus, FaTrash } from 'react-icons/fa'
+import { FaTrash } from 'react-icons/fa'
 import ActionButton from '../../components/ActionButton'
 import { ActionMenu } from '../../types/props'
+import { FaGear } from 'react-icons/fa6'
 
 type QuizLocation = {
     hash: string
@@ -114,17 +101,30 @@ const QuizItem = () => {
             {
                 name: 'Choices',
                 cell: (row) => (
-                    <List>
+                    <List
+                        display={{
+                            base: 'block',
+                            sm: 'block',
+                            md: 'grid',
+                            lg: 'grid',
+                        }}
+                        sx={{
+                            width: '100%',
+                            gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+                        }}
+                    >
                         {row.choices.map((choice) => (
                             <ListItem
                                 key={choice.id}
                                 listStyleType='lower-alpha'
+                                listStylePos='inside'
                             >
                                 {choice.label}
                             </ListItem>
                         ))}
                     </List>
                 ),
+                center: true,
                 wrap: true,
             },
             {
@@ -132,32 +132,21 @@ const QuizItem = () => {
                 name: 'Answer',
                 selector: (row) => row.answer,
                 format: (row) => row.choices[row.answer].label,
+                center: true,
             },
 
             {
+                name: <FaGear />,
                 width: '3rem',
                 right: true,
                 cell: (row) => (
                     <ActionButton actions={quizItemActions} row={row} />
                 ),
+                center: true,
             },
         ],
         []
     )
-
-    React.useEffect(() => {
-        if (!location.state) {
-            const getTopicFromDb = async () => {
-                const id = location.pathname.substring(
-                    location.pathname.lastIndexOf('/') + 1
-                )
-                // const response = await getQuiz(id)
-                // console.log(response.data.data)
-                // location.state = response.data.data
-            }
-            getTopicFromDb()
-        }
-    }, [])
 
     return (
         <Stack>
@@ -166,7 +155,24 @@ const QuizItem = () => {
                 data={getQuizItemData?.items as QuizItemData[]}
                 columns={columns}
                 progressPending={isGetQuizItemLoading}
-                customStyles={rdtCustomStyle}
+                customStyles={{
+                    ...rdtCustomStyle,
+                    headCells: {
+                        style: {
+                            borderTop: '1px solid #2D3748',
+                            '&:not(:last-of-type)': {
+                                borderRight: '1px solid #2D3748',
+                            },
+                        },
+                    },
+                    cells: {
+                        style: {
+                            '&:not(:last-of-type)': {
+                                borderRight: '1px solid #2D3748',
+                            },
+                        },
+                    },
+                }}
             />
             {/* <Heading color='white'>{location.state.title}</Heading>
             <Text color='white' mb={4}>

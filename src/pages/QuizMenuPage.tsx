@@ -1,88 +1,123 @@
+import React from 'react'
+import useQuiz from '../hooks/useQuiz'
 import {
-  Heading,
-  Link,
-  ListItem,
-  UnorderedList,
-  Stack,
-  Flex,
-} from "@chakra-ui/react"
-import landingBgOverlay from "../assets/WelcomeBg.png"
-import { NavLink } from "react-router-dom"
-import ReturnButton from "../components/ReturnButton"
-import { quizmenu } from "../data/quizmenu"
+    Box,
+    Button,
+    Divider,
+    Flex,
+    Heading,
+    List,
+    ListItem,
+    Stack,
+    Text,
+} from '@chakra-ui/react'
+import { ActionMenu } from '../types/props'
+import { QuizData } from '../types/data'
+import { FaClock, FaHourglass, FaList } from 'react-icons/fa'
+import moment from 'moment'
 
 const QuizMenuPage = () => {
-  return (
-    <Flex
-      background="gray"
-      minHeight="calc(100vh - 80px)"
-      padding={6}
-      justifyContent="center"
-      sx={{
-        "&:before": {
-          content: "''",
-          position: "absolute",
-          top: 0,
-          left: 0,
-          bottom: 0,
-          right: 0,
-          backgroundImage: `url(${landingBgOverlay})`,
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
-          backgroundAttachment: "fixed",
-          zIndex: -2,
-        },
-        "&:after": {
-          content: "''",
-          position: "absolute",
-          top: 0,
-          left: 0,
-          bottom: 0,
-          right: 0,
-          backgroundImage: `linear-gradient(to bottom, rgba(255, 255, 255, 1), rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1), rgba(4, 19, 60, 1))`,
-          backdropFilter: "blur(12px)",
-          zIndex: -1,
-        },
-        position: "relative",
-        justifyContent: "center",
-        alignItems: "center",
-        zIndex: 1,
-      }}
-    >
-      <Stack
-        alignSelf="center"
-        padding={6}
-        width="fit-content"
-        background="white"
-        borderRadius="xl"
-        shadow="md"
-      >
-        <ReturnButton />
-        <Heading>QUIZZES</Heading>
-        {quizmenu.map((lesson, i) => (
-          <Stack key={i} ml={6}>
-            <Heading size="md">
-              UNIT {lesson.unit}. {lesson.title}
-            </Heading>
-            <UnorderedList ml={8}>
-              {lesson.topics.map((topic, j) => (
-                <ListItem key={j}>
-                  <Link
-                    as={NavLink}
-                    to={`${topic.name.replace(/[,:\s]+/g, "_").toLowerCase()}`}
-                    state={{ id: topic.id }}
-                  >
-                    {topic.name}
-                  </Link>
-                </ListItem>
-              ))}
-            </UnorderedList>
-          </Stack>
-        ))}
-      </Stack>
-    </Flex>
-  )
+    const { infiniteQuizzes, fetchNextPage } = useQuiz()
+
+    return (
+        <Flex gap={2}>
+            <Stack>
+                {infiniteQuizzes?.pages.map((page: QuizData[]) =>
+                    page.map((quiz) => (
+                        <Stack
+                            key={quiz.id}
+                            borderWidth={1}
+                            borderColor='gray.700'
+                            rounded='md'
+                            padding={4}
+                            cursor='pointer'
+                            _hover={{
+                                background: 'whiteAlpha.50',
+                            }}
+                        >
+                            <Heading color='white' fontSize='xl'>
+                                {quiz.title}
+                            </Heading>
+
+                            <Flex gap={1} width='max-content'>
+                                <Flex
+                                    color='gray.400'
+                                    fontSize='xs'
+                                    alignItems='center'
+                                    gap={1}
+                                >
+                                    <FaClock />
+                                    <Text>
+                                        {moment(quiz.created_at).format('L')}
+                                    </Text>
+                                </Flex>
+                                <Divider
+                                    orientation='vertical'
+                                    alignSelf='stretch'
+                                    height='auto'
+                                />
+                                <Flex
+                                    color='gray.400'
+                                    fontSize='xs'
+                                    alignItems='center'
+                                    gap={1}
+                                >
+                                    <FaList />
+                                    <Text>{quiz.items.length}</Text>
+                                </Flex>
+                                <Divider
+                                    orientation='vertical'
+                                    alignSelf='stretch'
+                                    height='auto'
+                                />
+                                <Flex
+                                    color='gray.400'
+                                    fontSize='xs'
+                                    alignItems='center'
+                                    gap={1}
+                                >
+                                    <FaHourglass />
+                                    <Text>{quiz.time_limit}</Text>
+                                </Flex>
+                            </Flex>
+
+                            <Text color='gray.400' fontSize='xs'>
+                                {quiz.description}
+                            </Text>
+                        </Stack>
+                    ))
+                )}
+                <Button
+                    width='fit-content'
+                    m='auto'
+                    color='white'
+                    size='sm'
+                    variant='ghost'
+                    onClick={() => fetchNextPage()}
+                    _hover={{
+                      backgroundColor: 'whiteAlpha.100',
+                    }}
+                >
+                    Load More
+                </Button>
+            </Stack>
+            <Box
+                width='100%'
+                hideBelow='md'
+                // maxWidth='2xl'
+                maxHeight='calc(100vh - 65px)'
+                alignSelf='stretch'
+                borderWidth={1}
+                borderColor='gray.700'
+                rounded='md'
+                sx={{
+                    position: 'sticky',
+                    top: 65,
+                    right: 0,
+                }}
+            ></Box>
+        </Flex>
+    )
 }
 
 export default QuizMenuPage
