@@ -39,7 +39,7 @@ const cards = [
         svgSrc: QuizSvg,
         description:
             'Test your statistical knowledge with our interactive quizzes. Challenge yourself with a range of questions covering different topics and difficulty levels. Receive instant feedback to track your progress and improve your skills.',
-        path: 'quiz',
+        path: 'quizzes',
         buttonLabel: 'Take Quizzes',
     },
     {

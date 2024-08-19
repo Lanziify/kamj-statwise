@@ -21,7 +21,7 @@ const useLesson = () => {
     })
 
     const { mutateAsync: getLesson, isPending: isGetLessonLoading, isError: isGetLessonError} = useMutation({
-        mutationFn: ({ lessonId, topicId }: { lessonId: string; topicId?: string }) => {
+        mutationFn: ({ lessonId, topicId }: { lessonId: number; topicId?: number }) => {
             return axios.get(`lessons/${lessonId}}`, {
                 params: {
                     topic: topicId

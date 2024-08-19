@@ -21,8 +21,8 @@ const useTopic = () => {
     })
 
     const { mutateAsync: getTopic, isPending: isGetTopicLoading, isError: isGetTopicError} = useMutation({
-        mutationFn: (topicID: string) => {
-            return axios.get(`topics/${topicID}`)
+        mutationFn: async (topicID: number): Promise<TopicData> => {
+            return (await axios.get(`topics/${topicID}`)).data
         },
     })
 

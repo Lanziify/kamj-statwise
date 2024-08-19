@@ -38,7 +38,7 @@ function App() {
                     />
                 </Route>
                 {/* <Route path='lessons/:id' element={<LessonContent />} /> */}
-                <Route path='quiz' element={<QuizMenuPage />} />
+                <Route path='quizzes' element={<QuizMenuPage />} />
                 <Route path='quiz/:id' element={<QuizPage />} />
                 <Route path='quiz/score' element={<ScorePage />} />
                 <Route path='infographic' element={<InfoGraphics />} />

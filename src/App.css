@@ -4,7 +4,7 @@ body {
 }
 
 * {
-  -webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color: transparent;
 }
 
 ::-webkit-scrollbar {
@@ -38,4 +38,14 @@ input:-webkit-autofill:active {
 
 ::-webkit-calendar-picker-indicator {
     filter: invert(1);
+}
+
+.lesson-content-container * {
+    max-width: 100%;
+}
+
+.lesson-content-container {
+    /* mix-blend-mode: difference; */
+    /* filter: invert(1); */
+    color: #ffffff;
 }

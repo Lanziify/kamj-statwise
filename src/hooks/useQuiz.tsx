@@ -36,22 +36,24 @@ const useQuiz = () => {
 
     const {
         data: infiniteQuizzes,
-        isLoading: isInifiniteQuizzesLoading,
+        isFetching: isInifiniteQuizzesLoading,
         fetchNextPage,
+        hasNextPage
     } = useInfiniteQuery({
         queryKey: ['infiniteQuizzes'],
-        queryFn: async ({ pageParam }: { pageParam: number }) => {
+        queryFn: async ({ pageParam }: { pageParam: number }): Promise<QuizData[]> => {
             const response = await axios.get(`quizzes`, {
                 params: {
                     page: pageParam,
-                    // limit: 20,
                 },
             })
             return response.data.quizzes
         },
         initialPageParam: 1,
         getNextPageParam: (lastPage, pages) => {
-            // console.log(lastPage, pages)
+            if (lastPage.length === 0) {
+                return undefined;
+            }
             return pages.length + 1
         },
     })
@@ -69,8 +71,8 @@ const useQuiz = () => {
         isPending: isGetQuizLoading,
         isError: isGetQuizError,
     } = useMutation({
-        mutationFn: (topicID: string) => {
-            return axios.get(`quizzes/${topicID}`)
+        mutationFn: (id: number) => {
+            return axios.get(`quizzes/${id}`)
         },
     })
 
@@ -111,6 +113,7 @@ const useQuiz = () => {
         isGetQuizError,
         totalQuiz,
         fetchNextPage,
+        hasNextPage,
         getQuiz,
         addQuiz,
         deleteQuiz,
