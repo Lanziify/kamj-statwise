@@ -1,4 +1,4 @@
-import { Flex, Heading, Stack, Text } from '@chakra-ui/react'
+import { Box, Flex, Heading, Stack, Text } from '@chakra-ui/react'
 import { useLocation } from 'react-router-dom'
 import React from 'react'
 import useLesson from '../hooks/useLesson'
@@ -15,7 +15,9 @@ type LessonLocation = {
 
 const LessonContent = () => {
     const location: LessonLocation = useLocation()
-    const [topicData, setTopicData] = React.useState<TopicData | null>(location.state || null)
+    const [topicData, setTopicData] = React.useState<TopicData | null>(
+        location.state || null
+    )
 
     const { topics } = useTopic()
 
@@ -49,7 +51,9 @@ const LessonContent = () => {
                     <Heading color='black' textAlign='center'>
                         {topicData.title}
                     </Heading>
-                    <div
+                    <Box
+                    color='black'
+                        className='lesson-content-container'
                         dangerouslySetInnerHTML={{
                             __html: topicData.content,
                         }}

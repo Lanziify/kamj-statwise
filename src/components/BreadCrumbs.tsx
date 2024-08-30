@@ -9,6 +9,7 @@ import { NavLink, useLocation } from 'react-router-dom'
 
 const BreadCrumbs = () => {
     const location = useLocation()
+
     const pathnames = location.pathname.split('/').slice(1)
 
     const getPath = (path: string) => {
@@ -16,9 +17,7 @@ const BreadCrumbs = () => {
 
         if (pathnames.length - 1 === pathIndex) return
 
-        // if (pathIndex != pathnames.length - 1) {
         return `/${pathnames.slice(0, pathIndex + 1).join('/')}`
-        // }
     }
 
     return (
@@ -36,6 +35,7 @@ const BreadCrumbs = () => {
                     <BreadcrumbItem key={index}>
                         <BreadcrumbLink
                             as={NavLink}
+                            // state={location.state}
                             to={getPath(pathname)}
                             sx={{
                                 maxWidth: '5rem',

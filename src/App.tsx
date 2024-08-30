@@ -1,5 +1,6 @@
-import { Navigate, Route, Routes } from 'react-router-dom'
+import React from 'react'
 import './App.css'
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import IndexPage from './pages/IndexPage'
 import PublicRoute from './routes/Public'
 import PublicLessons from './pages/PublicLessons'
@@ -21,6 +22,12 @@ import LessonContent from './pages/LessonContent'
 import LessonItem from './pages/LessonItem'
 
 function App() {
+    const { pathname } = useLocation()
+
+    React.useEffect(() => {
+        window.scrollTo(0, 0)
+    }, [pathname])
+
     return (
         <Routes>
             <Route path='/' index element={<IndexPage />} />
@@ -37,9 +44,12 @@ function App() {
                         element={<LessonContent />}
                     />
                 </Route>
-                {/* <Route path='lessons/:id' element={<LessonContent />} /> */}
-                <Route path='quizzes' element={<QuizMenuPage />} />
-                <Route path='quiz/:id' element={<QuizPage />} />
+
+                <Route path='quizzes'>
+                    <Route index element={<QuizMenuPage />} />
+                    <Route path=':id' element={<QuizPage />} />
+                </Route>
+
                 <Route path='quiz/score' element={<ScorePage />} />
                 <Route path='infographic' element={<InfoGraphics />} />
                 <Route path='*' element={<NotFound />} />

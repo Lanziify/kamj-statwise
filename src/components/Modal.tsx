@@ -10,13 +10,14 @@ import {
 import React from 'react'
 
 type CustomModalProps = ChakraModalProps & {
-    title?: string | JSX.Element | undefined 
-
+    title?: string | JSX.Element | undefined
+    showCloseButton?: boolean
     children: React.ReactNode
 }
 
 const CustomModal: React.FC<CustomModalProps> = ({
     title,
+    showCloseButton = true,
     children,
     ...props
 }) => {
@@ -25,7 +26,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
             <ModalOverlay />
             <ModalContent background='gray.800' margin={4}>
                 <ModalHeader color='white'>{title || 'Modal'}</ModalHeader>
-                <ModalCloseButton color='white' />
+                {showCloseButton && <ModalCloseButton color='white' />}
                 <ModalBody pb={6}>{children}</ModalBody>
             </ModalContent>
         </ChakraModal>

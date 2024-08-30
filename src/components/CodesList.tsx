@@ -46,11 +46,12 @@ const CodesList: React.FC<QuizCodeList> = (props) => {
     const columns = React.useMemo<TableColumn<QuizCodeData>[]>(
         () => [
             {
-                grow: 0,
+                width: '8rem',
                 name: 'Code',
                 selector: (row) => row.code,
             },
             {
+                
                 name: 'Expires',
                 selector: (row) => row.expires_at,
                 format: (row) => moment(row.expires_at).format('LLL'),

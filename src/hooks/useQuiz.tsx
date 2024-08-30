@@ -36,7 +36,8 @@ const useQuiz = () => {
 
     const {
         data: infiniteQuizzes,
-        isFetching: isInifiniteQuizzesLoading,
+        isLoading: isInifiniteQuizzesLoading,
+        isFetching: isInifiniteQuizzesFetching,
         fetchNextPage,
         hasNextPage
     } = useInfiniteQuery({
@@ -45,6 +46,7 @@ const useQuiz = () => {
             const response = await axios.get(`quizzes`, {
                 params: {
                     page: pageParam,
+                    active: 1,
                 },
             })
             return response.data.quizzes
@@ -108,6 +110,7 @@ const useQuiz = () => {
         infiniteQuizzes,
         isQuizzesLoading,
         isInifiniteQuizzesLoading,
+        isInifiniteQuizzesFetching,
         isGetQuizLoading,
         isQuizzesError,
         isGetQuizError,

@@ -10,8 +10,8 @@ import {
 } from '@chakra-ui/react'
 import { IoExtensionPuzzle, IoMenuOutline } from 'react-icons/io5'
 import React from 'react'
-import { NavLink, useLocation } from 'react-router-dom'
-import { Link } from 'react-scroll'
+import { Link, NavLink, useLocation } from 'react-router-dom'
+// import { Link } from 'react-scroll'
 import { FaBook, FaGamepad, FaImage, FaLock, FaPencil } from 'react-icons/fa6'
 import { useAuth } from '../context/Auth'
 import { MdLibraryBooks, MdOutlineDashboard } from 'react-icons/md'
@@ -30,31 +30,26 @@ const Header = () => {
             label: 'Check Lessons',
             icon: <FaBook />,
             path: 'lessons',
-            as: NavLink,
         },
         {
             label: 'Take Quizes',
             icon: <FaPencil />,
             path: 'quizzes',
-            as: NavLink,
         },
         {
             label: 'Play Games',
             icon: <FaGamepad />,
             path: 'games',
-            as: NavLink,
         },
         {
             label: 'View Infographics',
             icon: <FaImage />,
             path: 'infographics',
-            as: NavLink,
         },
         {
             label: 'Login Admin',
             icon: <FaLock />,
             path: 'login',
-            as: NavLink,
         },
     ]
     const adminMenuItems = [
@@ -62,43 +57,36 @@ const Header = () => {
             label: 'Dashboard',
             icon: <MdOutlineDashboard />,
             path: '/admin/dashboard',
-            as: NavLink,
         },
         {
             label: 'My Lessons',
             icon: <MdLibraryBooks />,
             path: '/admin/lessons',
-            as: NavLink,
         },
         {
             label: 'My Quizzes',
             icon: <IoExtensionPuzzle />,
             path: '/admin/quizzes',
-            as: NavLink,
         },
         // {
         //     label: 'Check Lessons',
         //     icon: <FaBook />,
         //     path: 'lessons',
-        //     as: NavLink,
         // },
         // {
         //     label: 'Take Quizes',
         //     icon: <FaPencil />,
         //     path: 'quizzes',
-        //     as: NavLink,
         // },
         // {
         //     label: 'Play Games',
         //     icon: <FaGamepad />,
         //     path: 'games',
-        //     as: NavLink,
         // },
         // {
         //     label: 'View Infographics',
         //     icon: <FaImage />,
         //     path: 'infographics',
-        //     as: NavLink,
         // },
     ]
 
@@ -147,11 +135,11 @@ const Header = () => {
                 }}
             >
                 <Flex justify='space-between' alignItems='center'>
-                    <NavLink to='/'>
+                    <Link to='/'>
                         <Text textColor='white' fontWeight='black'>
                             KAMJ StatWise
                         </Text>
-                    </NavLink>
+                    </Link>
                     {/* <IconButton
                         ref={btnRef}
                         size='sm'
@@ -177,7 +165,7 @@ const Header = () => {
                                         key={menuItem.label}
                                         background='transparent'
                                         icon={menuItem.icon}
-                                        as={menuItem?.as}
+                                        as={Link}
                                         to={menuItem.path}
                                         fontWeight={500}
                                         fontSize='sm'
@@ -201,7 +189,8 @@ const Header = () => {
                     </Menu>
                 </Flex>
             </Box>
-            <BreadCrumbs />
+
+            {location.pathname.includes('admin') && <BreadCrumbs />}
         </Box>
     )
 }

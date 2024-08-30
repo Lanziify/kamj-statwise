@@ -21,7 +21,7 @@ import InfographSvg from '../assets/undraw_information_tab_re_f0w3.svg'
 import landingBgOverlay from '../assets/HeroBg.png'
 import aboutBgOverlay from '../assets/WebBg.jpg'
 import helpBgOverlay from '../assets/HelpBg.jpg'
-import { NavLink } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { FaArrowRight } from 'react-icons/fa'
 import Header from '../components/Header'
 
@@ -208,15 +208,6 @@ const IndexPage = () => {
                                 </CardHeader>
                                 <CardBody paddingY={0}>
                                     <Flex gap={4}>
-                                        {/* <Image
-                                            aspectRatio={1}
-                                            src={item.svgSrc}
-                                            padding={4}
-                                            // background='#82899e'
-                                            borderRadius='md'
-                                            sizes='auto'
-                                            alignSelf='flex-start'
-                                        /> */}
                                         <Text color='white' fontSize='sm'>
                                             {item.description}
                                         </Text>
@@ -228,7 +219,7 @@ const IndexPage = () => {
                                         size='sm'
                                         variant='ghost'
                                         marginLeft='auto'
-                                        as={NavLink}
+                                        as={Link}
                                         _hover={{
                                             backgroundColor: 'whiteAlpha.200',
                                         }}
