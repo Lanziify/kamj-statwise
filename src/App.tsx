@@ -20,6 +20,7 @@ import QuizList from './pages/protected/QuizList'
 import QuizItem from './pages/protected/QuizItem'
 import LessonContent from './pages/LessonContent'
 import LessonItem from './pages/LessonItem'
+import Game from './pages/Game'
 
 function App() {
     const { pathname } = useLocation()
@@ -52,6 +53,7 @@ function App() {
 
                 <Route path='quiz/score' element={<ScorePage />} />
                 <Route path='infographic' element={<InfoGraphics />} />
+                <Route path='games' element={<Game />} />
                 <Route path='*' element={<NotFound />} />
             </Route>
             <Route element={<AuthRoute />}>
